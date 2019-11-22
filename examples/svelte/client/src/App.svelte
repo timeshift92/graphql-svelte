@@ -1,43 +1,23 @@
 <script>
-  // import Component1 from "./Component1.svelte";
-  // import Component2 from "./Component2.svelte";
-  // import SubscriptionClient from './sub.js';
-  import { SubscriptionClient } from "graphql-subscriptions-client";
-//   import { SubscriptionClient } from 'subscriptions-transport-ws';
-  const GRAPHQL_ENDPOINT = "wss://go.spphone.uz/v1/graphql";
+  import Component1 from "./Component1.svelte";
+  import Component2 from "./Component2.svelte";
+	
 
-	const client = new SubscriptionClient(GRAPHQL_ENDPOINT, {
-		reconnect: true,
-		// reconnectionAttempts:3,
-		// timeout: 1000,
-		lazy: true,
-		connectionParams: async () => {
-		return {
-			headers: {
-			"x-hasura-admin-secret": "tscorp"
-			}
-		};
-		}
-	});
-  var data = {"id":"1","type":"start","payload":{"variables":{"user_id":"eff8b110-2724-4e69-8a38-74f68024f78f","locales_id":1},"extensions":{},"operationName":null,"query":"subscription ($user_id: uuid, $locales_id: Int) {\n  favorites_aggregate(where: {user_id: {_eq: $user_id}}) {\n    nodes {\n      product {\n        product_locales(where: {locales_id: {_eq: $locales_id}}) {\n          name\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    aggregate {\n      count\n      __typename\n    }\n    __typename\n  }\n}\n"}}
-//   client.sendMessage({
-//     type: "connection_init",
-//     payload: { headers: { "x-hasura-admin-secret": "tscorp" } }
-//   });
-  // client.sendMessage(data)
-//   client.request(JSON.stringify(data.payload.query)).subscribe()
-  
-  const subscription = client.request(data.payload)
-  // so lets actually do something with the response
-  .subscribe({
-    next ({data}) {
-      if (data) {
-        console.log('We got something!', data)
-      }
+  var data = {
+    id: "1",
+    type: "start",
+    payload: {
+      variables: {
+        user_id: "eff8b110-2724-4e69-8a38-74f68024f78f",
+        locales_id: 1
+      },
+      extensions: {},
+      operationName: null,
+      query:
+        "subscription ($user_id: uuid, $locales_id: Int) {\n  favorites_aggregate(where: {user_id: {_eq: $user_id}}) {\n    nodes {\n      product {\n        product_locales(where: {locales_id: {_eq: $locales_id}}) {\n          name\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    aggregate {\n      count\n      __typename\n    }\n    __typename\n  }\n}\n"
     }
-  })
-  debugger;
-
+  };
+  
   let name = "World";
   let selected = 1;
 </script>
@@ -91,9 +71,9 @@
   </button>
 </div>
 
-<!-- {#if selected ==1}
+{#if selected ==1}
 	 <Component1 />
 {:else}
 	 <Component2/>
 	 <Component2/>
-{/if} -->
+{/if}
