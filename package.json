@@ -1,0 +1,37 @@
+{
+  "name": "graphql-svelte",
+  "version": "0.0.1",
+  "description": "graphql fetcher alternate apollo client",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf public/bundle*",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "rollup": "^1.27.4",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-hot": "^0.0.6",
+    "rollup-plugin-livereload": "^1.0.4",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "extract-files": "^5.0.1",
+    "fnv1a": "^1.0.1",
+    "mitt": "^1.2.0",
+    "sirv-cli": "^0.4.4",
+    "unfetch": "^4.1.0"
+  },
+  "dependencies": {
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timeshift92/graphql-svelte.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timeshift92/graphql-svelte/issues"
+  },
+  "homepage": "https://github.com/timeshift92/graphql-svelte#readme"
+}
