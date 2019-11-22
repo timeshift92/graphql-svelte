@@ -1,7 +1,6 @@
   
   import graphql,{fetchOptionsOverride} from "./config";
-  import { graphqlFetchOptions } from "grpahql-svelte/src/graphqlFetchOptions";
-  import { hashObject } from 'grpahql-svelte/src/hashObject'
+  import { graphqlFetchOptions,hashObject  } from "grpahql-svelte";
 
 
   graphql.on('cache', onCache)

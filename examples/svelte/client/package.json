@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "cross-env": "^6.0.3",
+    "grpahql-svelte": "https://github.com/timeshift92/graphql-svelte",
     "nollup": "^0.8.5",
     "rollup": "^1.27.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -11,15 +12,9 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte-hot": "^0.0.11",
     "rollup-plugin-terser": "^5.1.2",
-    "grpahql-svelte":"https://github.com/timeshift92/graphql-svelte",
     "svelte": "^3.15.0"
   },
   "dependencies": {
-    "extract-files": "^5.0.1",
-    "fnv1a": "^1.0.1",
-    "mitt": "^1.2.0",
-    "sirv-cli": "^0.4.4",
-    "unfetch": "^4.1.0"
   },
   "scripts": {
     "clean": "rm -rf public/bundle*",
