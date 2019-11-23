@@ -45,7 +45,6 @@ export { SubscribeQL} from './src/SubscribeQL';
  * @prop {string|FormData} body HTTP request body.
  * @prop {object} headers HTTP request headers.
  * @prop {string} [credentials] Authentication credentials mode.
- * @see [`GraphQLFetchOptionsOverride` functions]{@link GraphQLFetchOptionsOverride} accept this type.
  */
 
 
@@ -57,8 +56,6 @@ export { SubscribeQL} from './src/SubscribeQL';
  * @type {object}
  * @prop {string} query GraphQL queries/mutations.
  * @prop {object} variables Variables used in the `query`.
- * @see [`GraphQL` instance method `operate`]{@link GraphQL#operate} accepts this type in `options.operation`.
- * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type in `options.operation`.
  */
 
 /**
@@ -69,7 +66,6 @@ export { SubscribeQL} from './src/SubscribeQL';
  * @prop {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
  * @prop {GraphQLCacheValue} [cacheValue] [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue} from the last identical query.
  * @prop {Promise<GraphQLCacheValue>} cacheValuePromise Resolves the loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
- * @see [`GraphQL` instance method `operate`]{@link GraphQL#operate} returns this type.
  */
 
 /**
@@ -81,7 +77,6 @@ export { SubscribeQL} from './src/SubscribeQL';
  * @prop {boolean} loading Is the GraphQL operation loading.
  * @prop {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
  * @prop {GraphQLCacheValue} cacheValue [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
- * @see [`useGraphQL`]{@link useGraphQL} React hook returns this type.
  */
 
 /**

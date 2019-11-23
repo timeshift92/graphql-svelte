@@ -1,4 +1,7 @@
-import 'unfetch/polyfill'
+import fetchPonyfill from 'fetch-ponyfill';
+if (!process.browser){
+  const { fetch } = fetchPonyfill();
+}
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 import mitt from 'mitt';
@@ -60,10 +63,10 @@ export class GraphQL {
         }) => {
           // JSON parse ok.
           if (!errors && !data) cacheValue.parseError = 'Malformed payload.';
-          if (errors){
-            throw new Error(JSON.stringify(errors))
+          if (errors) {
+            // throw new Error(JSON.stringify(errors))
             cacheValue.graphQLErrors = errors;
-          } 
+          }
           if (data) cacheValue.data = data;
 
         }, ({
@@ -108,12 +111,12 @@ export class GraphQL {
       if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
       const cacheKey = hashObject(fetchOptions);
       const cacheValuePromise = // Use an identical existing request or…
-      this.operations[cacheKey] || // …make a fresh request.
-      this.fetch(fetchOptions, cacheKey); // Potential edge-case issue: Multiple identical queries with resetOnLoad
+        this.operations[cacheKey] || // …make a fresh request.
+        this.fetch(fetchOptions, cacheKey); // Potential edge-case issue: Multiple identical queries with resetOnLoad
       // enabled will cause excessive resets.
 
       cacheValuePromise.then(() => {
-        if (reloadOnLoad) this.reload(cacheKey);else if (resetOnLoad) this.reset(cacheKey);
+        if (reloadOnLoad) this.reload(cacheKey); else if (resetOnLoad) this.reset(cacheKey);
       });
       return {
         cacheKey,
@@ -191,7 +194,6 @@ export class GraphQL {
   }
   /**
    * Signals that [GraphQL cache]{@link GraphQL#cache} subscribers such as the
-   * [`useGraphQL`]{@link useGraphQL} React hook should reload their GraphQL
    * operation. Emits a [`GraphQL`]{@link GraphQL} instance `reload` event.
    * @kind function
    * @name GraphQL#reload

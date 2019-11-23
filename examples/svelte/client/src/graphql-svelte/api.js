@@ -1,7 +1,8 @@
 
 import graphql, { fetchOptionsOverride } from "./config";
 import { graphqlFetchOptions, hashObject, SubscribeQL } from "graphql-svelte";
-let sub = new SubscribeQL('ws://localhost/v1/graphql', {
+
+let sub = new SubscribeQL('ws://localhost:8082/v1/graphql', {
   reconnect: true,
   reconnectionAttempts: 3,
   // timeout: 1000,
@@ -17,7 +18,9 @@ let sub = new SubscribeQL('ws://localhost/v1/graphql', {
 
 
 let subscribe = (query) => {
+  debugger;
   return sub.request(query);
+  // return 'sub.request(query);'
 }
 
 

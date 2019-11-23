@@ -1,5 +1,8 @@
 node_modules/
 yarn.lock
+yarn-error.log
 package-lock.json
 dist/
 .DS_Store
+.env
+.nyc_output/

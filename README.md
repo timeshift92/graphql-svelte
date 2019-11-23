@@ -1,11 +1,13 @@
 # graphql-svelte
+
 Alternate apollo-graphql for Svelte and other native js
 
 # setup
- ```
- $ npm i -d graphql-svelte <br>
- $ yarn add --dev graphql-svelte
- ```
+
+```
+$ npm i -d graphql-svelte <br>
+$ yarn add --dev graphql-svelte
+```
 
 # how to use
 
@@ -40,7 +42,7 @@ let subscribe = (query) => {
   return sub.request(query);
 }
 
-//if you nedd query and mutate 
+//if you nedd query and mutate
 
 let get = async (query, variables) => {
   const fetchOptions = graphqlFetchOptions({
@@ -65,20 +67,22 @@ let get = async (query, variables) => {
 
 
 export { get, subscribe };
- 
+
 ```
 
+A lightweight but powerful GraphQL client for Svelte using modern the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react)
 
-A lightweight but powerful GraphQL client for Svelte using modern  the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react) 
-
-## API  ( <b>attention </b> current  information taken from https://github.com/jaydenseric/graphql-react)
+## API ( <b>attention </b> current information taken from https://github.com/jaydenseric/graphql-react)
 
 ### Table of contents
 
+- [operate](GraphQL#operate)
 - [graphql-svelte](#graphql-svelte)
 - [setup](#setup)
 - [how to use](#how-to-use)
+
   - [API ( <b>attention </b> current information taken from https://github.com/jaydenseric/graphql-react)](#api--battention-b-current-information-taken-from-httpsgithubcomjaydensericgraphql-react)
+
     - [Table of contents](#table-of-contents)
     - [class GraphQL](#class-graphql)
       - [See](#see)
@@ -112,7 +116,7 @@ A lightweight but powerful GraphQL client for Svelte using modern  the first [Re
     - [type GraphQLOperationStatus](#type-graphqloperationstatus)
       - [See](#see-7)
     - [type HttpError](#type-httperror)
-    
+
     - [type GraphQLCache](#type-graphqlcache)
       - [See](#see-6)
     - [type GraphQLCacheKey](#type-graphqlcachekey)
@@ -129,8 +133,8 @@ A lightweight but powerful GraphQL client for Svelte using modern  the first [Re
     - [type GraphQLOperationStatus](#type-graphqloperationstatus)
       - [See](#see-11)
     - [type HttpError](#type-httperror)
-    
-    
+
+
     - [type GraphQLCache](#type-graphqlcache)
       - [See](#see-6)
     - [type GraphQLCacheKey](#type-graphqlcachekey)
@@ -149,6 +153,8 @@ A lightweight but powerful GraphQL client for Svelte using modern  the first [Re
     - [type HttpError](#type-httperror)
 
 ### class GraphQL
+
+# operate
 
 A lightweight GraphQL client that caches queries and mutations.
 
@@ -209,7 +215,7 @@ Loads or reuses an already loading GraphQL operation in [GraphQL operations](#gr
 
 #### GraphQL instance method reload
 
-Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation. Emits a [`GraphQL`](#class-graphql) instance `reload` event.
+GraphQL operation. Emits a [`GraphQL`](#class-graphql) instance `reload` event.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
@@ -275,8 +281,6 @@ A map of loading GraphQL operations. You probably don’t need to interact with 
 
 ---
 
-
-
 ### function reportCacheErrors
 
 A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
@@ -299,9 +303,6 @@ _[`GraphQL`](#class-graphql) initialized to report cache errors._
 > ```
 
 ---
-
-
-
 
 ### type GraphQLCache
 
@@ -372,7 +373,6 @@ Overrides default [GraphQL `fetch` options](#type-graphqlfetchoptions). Mutate t
 #### See
 
 - [`GraphQL` instance method `operate`](#graphql-instance-method-operate) accepts this type in `options.fetchOptionsOverride`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type in `options.fetchOptionsOverride`.
 
 #### Examples
 
@@ -401,7 +401,6 @@ A GraphQL operation. Additional properties may be used; all are sent to the Grap
 #### See
 
 - [`GraphQL` instance method `operate`](#graphql-instance-method-operate) accepts this type in `options.operation`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type in `options.operation`.
 
 ---
 
@@ -438,8 +437,6 @@ The status of a GraphQL operation.
 
 #### See
 
-- [`useGraphQL`](#function-usegraphql) React hook returns this type.
-
 ---
 
 ### type HttpError
@@ -454,4 +451,3 @@ The status of a GraphQL operation.
 | `statusText` | string | HTTP status text. |
 
 ---
-
