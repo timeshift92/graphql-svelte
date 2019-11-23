@@ -1,5 +1,5 @@
 # graphql-svelte
-partial clone https://github.com/jaydenseric/graphql-react for Svelte
+Alternate apollo-graphql for Svelte and other native js
 
 
 # how to use
