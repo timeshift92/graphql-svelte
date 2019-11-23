@@ -1,9 +1,9 @@
 
 import graphql, { fetchOptionsOverride } from "./config";
 import { graphqlFetchOptions, hashObject, SubscribeQL } from "graphql-svelte";
-let sub = new SubscribeQL('wss://go.spphone.uz/v1/graphql', {
+let sub = new SubscribeQL('ws://localhost/v1/graphql', {
   reconnect: true,
-  // reconnectionAttempts:3,
+  reconnectionAttempts: 3,
   // timeout: 1000,
   lazy: true,
   connectionParams: async () => {

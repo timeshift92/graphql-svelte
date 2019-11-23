@@ -19,7 +19,7 @@
     "svelte": "^3.15.0"
   },
   "dependencies": {
-    "graphql-svelte": "git+https://github.com/timeshift92/graphql-svelte.git",
+    "graphql-svelte":  "1.0.1",
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
