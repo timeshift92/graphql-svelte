@@ -66,13 +66,13 @@ export { get, subscribe };
 
 A lightweight but powerful GraphQL client for Svelte using modern  the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react) 
 
-## API
+## API  ( <b>attention </b> current  information taken from https://github.com/jaydenseric/graphql-react)
 
 ### Table of contents
 
 - [graphql-svelte](#graphql-svelte)
 - [how to use](#how-to-use)
-  - [API](#api)
+  - [API ( <b>attention </b> current information taken from https://github.com/jaydenseric/graphql-react)](#api--battention-b-current-information-taken-from-httpsgithubcomjaydensericgraphql-react)
     - [Table of contents](#table-of-contents)
     - [class GraphQL](#class-graphql)
       - [See](#see)
