@@ -1,6 +1,11 @@
 # graphql-svelte
 Alternate apollo-graphql for Svelte and other native js
 
+# setup
+ ```
+ $ npm i -d graphql-svelte <br>
+ $ yarn add --dev graphql-svelte
+ ```
 
 # how to use
 
@@ -71,6 +76,7 @@ A lightweight but powerful GraphQL client for Svelte using modern  the first [Re
 ### Table of contents
 
 - [graphql-svelte](#graphql-svelte)
+- [setup](#setup)
 - [how to use](#how-to-use)
   - [API ( <b>attention </b> current information taken from https://github.com/jaydenseric/graphql-react)](#api--battention-b-current-information-taken-from-httpsgithubcomjaydensericgraphql-react)
     - [Table of contents](#table-of-contents)

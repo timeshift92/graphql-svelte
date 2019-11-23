@@ -1,6 +1,11 @@
 {
   "name": "svelte-app",
   "version": "1.0.0",
+  "author": {
+    "name": "timeshift92",
+    "url": "https://github.com/timeshift92",
+    "email": "time_shift92@mail.ru"
+  },
   "devDependencies": {
     "cross-env": "^6.0.3",
     "nollup": "^0.8.5",
