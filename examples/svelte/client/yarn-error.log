@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/12.7.0/bin/node /usr/local/bin/yarn build
+  /usr/local/Cellar/node/12.7.0/bin/node /usr/local/bin/yarn add svelte-graphql-store
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/nurbek/development/flutter/bin:/Users/nurbek/development/flutter/.pub-cache/bin:/Users/nurbek/development/flutter/bin:/Users/nurbek/development/flutter/.pub-cache/bin
@@ -14,12 +14,17 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/nurbek/Desktop/Projects/Self/svelte-template-hot/package.json: Unexpected token } in JSON at position 704
-      at JSON.parse (<anonymous>)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:304:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:315:13
+  Error: https://registry.yarnpkg.com/svelte-graphql-store: Not found
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66830:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140464:22)
+      at Request.emit (events.js:203:13)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141436:10)
+      at Request.emit (events.js:203:13)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141358:12)
+      at Object.onceWrapper (events.js:291:20)
+      at IncomingMessage.emit (events.js:208:15)
+      at endReadableNT (_stream_readable.js:1161:12)
+      at processTicksAndRejections (internal/process/task_queues.js:77:11)
 
 npm manifest: 
   {
@@ -28,26 +33,20 @@ npm manifest:
     "devDependencies": {
       "cross-env": "^6.0.3",
       "nollup": "^0.8.5",
-      "rollup": "^1.26.3",
-      "rollup-plugin-commonjs": "^10.0.0",
+      "rollup": "^1.27.3",
+      "rollup-plugin-commonjs": "^10.1.0",
       "rollup-plugin-hot": "^0.0.6",
-      "rollup-plugin-livereload": "^1.0.0",
+      "rollup-plugin-livereload": "^1.0.4",
       "rollup-plugin-node-resolve": "^5.2.0",
       "rollup-plugin-svelte-hot": "^0.0.11",
       "rollup-plugin-terser": "^5.1.2",
-      "svelte": "^3.0.0",
-      "apollo-cache-inmemory": "^1.6.3",
-      "apollo-client": "^2.6.4",
-      "apollo-link": "^1.2.13",
-      "apollo-link-error": "^1.1.12",
-      "apollo-link-http": "^1.5.16",
-      "graphql-tag": "^2.10.1",
-      "svelte-apollo": "^0.3.0"
-  
+      "svelte": "^3.15.0"
     },
     "dependencies": {
-      
+      "graphql-svelte": "git+https://github.com/timeshift92/graphql-svelte.git",
       "sirv-cli": "^0.4.4",
+      "svelte-observable": "^0.4.0",
+      "zen-observable": "^0.8.15"
     },
     "scripts": {
       "clean": "rm -rf public/bundle*",
@@ -95,7 +94,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
     integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
   
-  "@types/node@*", "@types/node@>=6":
+  "@types/node@*":
     version "12.12.11"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.11.tgz#bec2961975888d964196bf0016a2f984d793d3ce"
     integrity sha512-O+x6uIpa6oMNTkPuHDa9MhMMehlxLAd5QcOvKRjAFsBVpeFWTOPnXbDvILvFgFFZfQ1xh1EZi1FbXxUix+zpsQ==
@@ -106,26 +105,6 @@ Lockfile:
     integrity sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==
     dependencies:
       "@types/node" "*"
-  
-  "@types/zen-observable@^0.8.0":
-    version "0.8.0"
-    resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"
-    integrity sha512-te5lMAWii1uEJ4FwLjzdlbw3+n0FZNOvFXHxQDKeT0dilh7HOzdMzV2TrJVUzq8ep7J4Na8OUYPRLSQkJHAlrg==
-  
-  "@wry/context@^0.4.0":
-    version "0.4.4"
-    resolved "https://registry.yarnpkg.com/@wry/context/-/context-0.4.4.tgz#e50f5fa1d6cfaabf2977d1fda5ae91717f8815f8"
-    integrity sha512-LrKVLove/zw6h2Md/KZyWxIkFM6AoyKp71OqpH9Hiip1csjPVoD3tPxlbQUNxEnHENks3UGgNpSBCAfq9KWuag==
-    dependencies:
-      "@types/node" ">=6"
-      tslib "^1.9.3"
-  
-  "@wry/equality@^0.1.2":
-    version "0.1.9"
-    resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.1.9.tgz#b13e18b7a8053c6858aa6c85b54911fb31e3a909"
-    integrity sha512-mB6ceGjpMGz1ZTza8HYnrPGos2mC6So4NhS1PtZ8s4Qt0K7fBiIGhpSxUbQmhwcSWE3no+bYxmI2OL6KuXYmoQ==
-    dependencies:
-      tslib "^1.9.3"
   
   abbrev@1:
     version "1.1.1"
@@ -169,85 +148,6 @@ Lockfile:
     dependencies:
       micromatch "^3.1.4"
       normalize-path "^2.1.1"
-  
-  apollo-cache-inmemory@^1.6.3:
-    version "1.6.3"
-    resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.6.3.tgz#826861d20baca4abc45f7ca7a874105905b8525d"
-    integrity sha512-S4B/zQNSuYc0M/1Wq8dJDTIO9yRgU0ZwDGnmlqxGGmFombOZb9mLjylewSfQKmjNpciZ7iUIBbJ0mHlPJTzdXg==
-    dependencies:
-      apollo-cache "^1.3.2"
-      apollo-utilities "^1.3.2"
-      optimism "^0.10.0"
-      ts-invariant "^0.4.0"
-      tslib "^1.9.3"
-  
-  apollo-cache@1.3.2, apollo-cache@^1.3.2:
-    version "1.3.2"
-    resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.3.2.tgz#df4dce56240d6c95c613510d7e409f7214e6d26a"
-    integrity sha512-+KA685AV5ETEJfjZuviRTEImGA11uNBp/MJGnaCvkgr+BYRrGLruVKBv6WvyFod27WEB2sp7SsG8cNBKANhGLg==
-    dependencies:
-      apollo-utilities "^1.3.2"
-      tslib "^1.9.3"
-  
-  apollo-client@^2.6.4:
-    version "2.6.4"
-    resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.6.4.tgz#872c32927263a0d34655c5ef8a8949fbb20b6140"
-    integrity sha512-oWOwEOxQ9neHHVZrQhHDbI6bIibp9SHgxaLRVPoGvOFy7OH5XUykZE7hBQAVxq99tQjBzgytaZffQkeWo1B4VQ==
-    dependencies:
-      "@types/zen-observable" "^0.8.0"
-      apollo-cache "1.3.2"
-      apollo-link "^1.0.0"
-      apollo-utilities "1.3.2"
-      symbol-observable "^1.0.2"
-      ts-invariant "^0.4.0"
-      tslib "^1.9.3"
-      zen-observable "^0.8.0"
-  
-  apollo-link-context@^1.0.18:
-    version "1.0.19"
-    resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.19.tgz#3c9ba5bf75ed5428567ce057b8837ef874a58987"
-    integrity sha512-TUi5TyufU84hEiGkpt+5gdH5HkB3Gx46npNfoxR4of3DKBCMuItGERt36RCaryGcU/C3u2zsICU3tJ+Z9LjFoQ==
-    dependencies:
-      apollo-link "^1.2.13"
-      tslib "^1.9.3"
-  
-  apollo-link-http-common@^0.2.15:
-    version "0.2.15"
-    resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.15.tgz#304e67705122bf69a9abaded4351b10bc5efd6d9"
-    integrity sha512-+Heey4S2IPsPyTf8Ag3PugUupASJMW894iVps6hXbvwtg1aHSNMXUYO5VG7iRHkPzqpuzT4HMBanCTXPjtGzxg==
-    dependencies:
-      apollo-link "^1.2.13"
-      ts-invariant "^0.4.0"
-      tslib "^1.9.3"
-  
-  apollo-link-http@^1.5.15:
-    version "1.5.16"
-    resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.5.16.tgz#44fe760bcc2803b8a7f57fc9269173afb00f3814"
-    integrity sha512-IA3xA/OcrOzINRZEECI6IdhRp/Twom5X5L9jMehfzEo2AXdeRwAMlH5LuvTZHgKD8V1MBnXdM6YXawXkTDSmJw==
-    dependencies:
-      apollo-link "^1.2.13"
-      apollo-link-http-common "^0.2.15"
-      tslib "^1.9.3"
-  
-  apollo-link@^1.0.0, apollo-link@^1.2.13:
-    version "1.2.13"
-    resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.13.tgz#dff00fbf19dfcd90fddbc14b6a3f9a771acac6c4"
-    integrity sha512-+iBMcYeevMm1JpYgwDEIDt/y0BB7VWyvlm/7x+TIPNLHCTCMgcEgDuW5kH86iQZWo0I7mNwQiTOz+/3ShPFmBw==
-    dependencies:
-      apollo-utilities "^1.3.0"
-      ts-invariant "^0.4.0"
-      tslib "^1.9.3"
-      zen-observable-ts "^0.8.20"
-  
-  apollo-utilities@1.3.2, apollo-utilities@^1.2.1, apollo-utilities@^1.3.0, apollo-utilities@^1.3.2:
-    version "1.3.2"
-    resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.3.2.tgz#8cbdcf8b012f664cd6cb5767f6130f5aed9115c9"
-    integrity sha512-JWNHj8XChz7S4OZghV6yc9FNnzEXj285QYp/nLNh943iObycI5GTDO3NGR9Dth12LRrSFMeDOConPfPln+WGfg==
-    dependencies:
-      "@wry/equality" "^0.1.2"
-      fast-json-stable-stringify "^2.0.0"
-      ts-invariant "^0.4.0"
-      tslib "^1.9.3"
   
   aproba@^1.0.3:
     version "1.2.0"
@@ -761,11 +661,6 @@ Lockfile:
       snapdragon "^0.8.1"
       to-regex "^3.0.1"
   
-  fast-json-stable-stringify@^2.0.0:
-    version "2.0.0"
-    resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz#d5142c0caee6b1189f87d3a76111064f86c8bbf2"
-    integrity sha1-1RQsDK7msRifh9OnYREGT4bIu/I=
-  
   fill-range@^4.0.0:
     version "4.0.0"
     resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-4.0.0.tgz#d544811d428f98eb06a63dc402d2403c328c38f7"
@@ -880,17 +775,9 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
     integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
   
-  graphql-tag@^2.10.1:
-    version "2.10.1"
-    resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.10.1.tgz#10aa41f1cd8fae5373eaf11f1f67260a3cad5e02"
-    integrity sha512-jApXqWBzNXQ8jYa/HLkZJaVw9jgwNqZkywa2zfFn16Iv1Zb7ELNHkJaXHR7Quvd5SIGsy6Ny7SUKATgnu05uEg==
-  
-  graphql@^14.5.8:
-    version "14.5.8"
-    resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.8.tgz#504f3d3114cb9a0a3f359bbbcf38d9e5bf6a6b3c"
-    integrity sha512-MMwmi0zlVLQKLdGiMfWkgQD7dY/TUKt4L+zgJ/aR0Howebod3aNgP5JkgvAULiR2HPVZaP2VEElqtdidHweLkg==
-    dependencies:
-      iterall "^1.2.2"
+  "graphql-svelte@git+https://github.com/timeshift92/graphql-svelte.git":
+    version "0.0.1"
+    resolved "git+https://github.com/timeshift92/graphql-svelte.git#4d41913d1ca62c8ad335261accca847a9d8c1b3d"
   
   has-flag@^3.0.0:
     version "3.0.0"
@@ -1150,11 +1037,6 @@ Lockfile:
     version "3.0.1"
     resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
     integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
-  
-  iterall@^1.2.2:
-    version "1.2.2"
-    resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
-    integrity sha512-yynBb1g+RFUPY64fTrFv7nsjRrENBQJaX2UL+2Szc9REFrSNm1rpSXHGzhmAy7a9uv3vlvgBlXnf9RqmPH1/DA==
   
   jest-worker@^24.6.0:
     version "24.9.0"
@@ -1524,13 +1406,6 @@ Lockfile:
     dependencies:
       wrappy "1"
   
-  optimism@^0.10.0:
-    version "0.10.3"
-    resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.10.3.tgz#163268fdc741dea2fb50f300bedda80356445fd7"
-    integrity sha512-9A5pqGoQk49H6Vhjb9kPgAeeECfUDF6aIICbMDL23kDLStBn1MWk3YvcZ4xWF9CsSf6XEgvRLkXy4xof/56vVw==
-    dependencies:
-      "@wry/context" "^0.4.0"
-  
   "opts@>= 1.2.0":
     version "1.2.7"
     resolved "https://registry.yarnpkg.com/opts/-/opts-1.2.7.tgz#4de4721d592c96901dae623a438c988e9ea7779f"
@@ -1721,7 +1596,7 @@ Lockfile:
     dependencies:
       glob "^7.1.3"
   
-  rollup-plugin-commonjs@^10.0.0:
+  rollup-plugin-commonjs@^10.1.0:
     version "10.1.0"
     resolved "https://registry.yarnpkg.com/rollup-plugin-commonjs/-/rollup-plugin-commonjs-10.1.0.tgz#417af3b54503878e084d127adf4d1caf8beb86fb"
     integrity sha512-jlXbjZSQg8EIeAAvepNwhJj++qJWNJw1Cl0YnOqKtP5Djx+fFGkp3WRh+W0ASCaFG5w1jhmzDxgu3SJuVxPF4Q==
@@ -1742,7 +1617,7 @@ Lockfile:
       rollup-pluginutils "^2.8.2"
       ws "^7.1.2"
   
-  rollup-plugin-livereload@^1.0.0:
+  rollup-plugin-livereload@^1.0.4:
     version "1.0.4"
     resolved "https://registry.yarnpkg.com/rollup-plugin-livereload/-/rollup-plugin-livereload-1.0.4.tgz#480919211c699db85a532dabe9aa29035578f9c1"
     integrity sha512-nbnSP8Mj2mmLZkrf080z3PrdacmpAW6UkmgM+BWClcJ8MSsruPONGTwirhZaNNHjUYvkJ+iF5/pSk4g0KV2uVQ==
@@ -1791,7 +1666,7 @@ Lockfile:
     dependencies:
       estree-walker "^0.6.1"
   
-  rollup@^1.26.3:
+  rollup@^1.27.3:
     version "1.27.3"
     resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.27.3.tgz#0e427d9bee9e30e6017e89b942d88276ce26f9e2"
     integrity sha512-79AEh4m5NPCz97GTuIoXpSFIMPyk2AiqVQp040baSRPXk/I4YMGt5/CR9GX5oEYEkxwBZoWLheaS1/w/FidfJw==
@@ -2077,14 +1952,6 @@ Lockfile:
     dependencies:
       has-flag "^3.0.0"
   
-  svelte-apollo@^0.3.0:
-    version "0.3.0"
-    resolved "https://registry.yarnpkg.com/svelte-apollo/-/svelte-apollo-0.3.0.tgz#8d0f60a5cd9cfbc15c42afdf5b2158da3c56e0ad"
-    integrity sha512-Ef2roOGIqqJPaNOBx4uM9EvlM0yd0ixRnFGj3sf4jmvCbcdfFXzh267GdtjfQx8IAGKwbpe9TbyI32/J6bOFpA==
-    dependencies:
-      apollo-utilities "^1.2.1"
-      svelte-observable "^0.4.0"
-  
   svelte-hmr@^0.1.1:
     version "0.1.2"
     resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.1.2.tgz#689b4242dcd3cb31b7542b106e5f0c9d7419fcbc"
@@ -2095,15 +1962,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/svelte-observable/-/svelte-observable-0.4.0.tgz#74756e42fa3516c154d53f4244fa9cf691854224"
     integrity sha512-e8CfnkUfOZ/nAIpdFi+g63lS5oU+8J+KKhwkHpO0/reADeTBbIiVbcCqVrLsETp8+i+4ydQoawNCwMP/C8oMyA==
   
-  svelte@^3.0.0:
+  svelte@^3.15.0:
     version "3.15.0"
     resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.15.0.tgz#9dda8ad1d86cd74626b25f9c182f3ae86599fd79"
     integrity sha512-OL9FIdUAmVTXR38cB/2vQQ9xWvW/7IuOASjWMfwRAB5NXywLW4Xqhblouan4odjI0S/JFGsytkgp7jelWpFgSA==
-  
-  symbol-observable@^1.0.2:
-    version "1.2.0"
-    resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
-    integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
   
   tar@^4:
     version "4.4.13"
@@ -2161,18 +2023,6 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
     integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
-  
-  ts-invariant@^0.4.0:
-    version "0.4.4"
-    resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
-    integrity sha512-uEtWkFM/sdZvRNNDL3Ehu4WVpwaulhwQszV8mrtcdeE8nN00BV9mAmQ88RkrBhFgl9gMgvjJLAQcZbnPXI9mlA==
-    dependencies:
-      tslib "^1.9.3"
-  
-  tslib@^1.9.3:
-    version "1.10.0"
-    resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
-    integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
   
   type-is@~1.6.17, type-is@~1.6.18:
     version "1.6.18"
@@ -2280,15 +2130,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
     integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
   
-  zen-observable-ts@^0.8.20:
-    version "0.8.20"
-    resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.20.tgz#44091e335d3fcbc97f6497e63e7f57d5b516b163"
-    integrity sha512-2rkjiPALhOtRaDX6pWyNqK1fnP5KkJJybYebopNSn6wDG1lxBoFs2+nwwXKoA6glHIrtwrfBBy6da0stkKtTAA==
-    dependencies:
-      tslib "^1.9.3"
-      zen-observable "^0.8.0"
-  
-  zen-observable@^0.8.0:
+  zen-observable@^0.8.15:
     version "0.8.15"
     resolved "https://registry.yarnpkg.com/zen-observable/-/zen-observable-0.8.15.tgz#96415c512d8e3ffd920afd3889604e30b9eaac15"
     integrity sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==

@@ -1,4 +1,4 @@
-import { GraphQL } from "graphql-svelte/src/index.js";
+import { GraphQL } from "graphql-svelte";
   const graphql = new GraphQL();
   const fetchOptionsOverride = options => {
     (options.url = "http://localhost:4000/graphql"),

@@ -1,7 +1,7 @@
 
 import graphql, { fetchOptionsOverride } from "./config";
-import { graphqlFetchOptions, hashObject, SubscribeQL } from "graphql-svelte/src/index.js";
-
+import { graphqlFetchOptions, hashObject, SubscribeQL } from "graphql-svelte";
+import Observable from 'zen-observable';
 let sub = new SubscribeQL('wss://go.spphone.uz/v1/graphql', {
   reconnect: true,
   // reconnectionAttempts:3,
@@ -15,29 +15,11 @@ let sub = new SubscribeQL('wss://go.spphone.uz/v1/graphql', {
     };
   }
 })
-let subscribe = async (query) => {
-  new Observable(observer => {
-    let dt
-    sub.request(query).subscribe({
-      async  next({ data }) {
-        if (data) {
-          debugger;
-          dt = data;
-        }
-      }
-    })
-    const timer = setTimeout(() => {
-      if (dt == 'error')
-        observer.error(new Error('Entered "error"'));
-      else {
-        observer.next(dt);
-        observer.complete();
-      }
-    }, 250)
-    return () => clearTimeout(timer);
-  })
-}
 
+
+let subscribe = (query) => {
+  return sub.request(query);
+}
 
 
 graphql.on('cache', onCache)
