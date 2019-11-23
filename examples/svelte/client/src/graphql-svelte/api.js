@@ -1,7 +1,6 @@
 
 import graphql, { fetchOptionsOverride } from "./config";
 import { graphqlFetchOptions, hashObject, SubscribeQL } from "graphql-svelte";
-import Observable from 'zen-observable';
 let sub = new SubscribeQL('wss://go.spphone.uz/v1/graphql', {
   reconnect: true,
   // reconnectionAttempts:3,
