@@ -1,6 +1,6 @@
-import fetchPonyfill from 'fetch-ponyfill';
-if (!process.browser){
-  const { fetch } = fetchPonyfill();
+
+if (typeof window === 'undefined'){
+  var fetch = require('node-fetch');
 }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
