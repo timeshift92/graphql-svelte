@@ -1,4 +1,0 @@
-export {
-  GraphQL,
-  reportCacheErrors
-} from '..'

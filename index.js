@@ -3,6 +3,8 @@ export { reportCacheErrors } from './src/reportCacheErrors'
 export {graphqlFetchOptions} from './src/graphqlFetchOptions'
 export {hashObject} from './src/hashObject'
 export { SubscribeQL} from './src/SubscribeQL';
+export { GraphQLProvider} from './src/GraphQLProvider';
+
 /**
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.
  * @kind typedef
