@@ -76,7 +76,7 @@ const client = (options) => {
 
   const fetchOptionsOverride = _options => {
     (_options.url = options.url),
-      (_options.headers = _options.headers);
+      (_options.headers = options.headers);
   };
 
   cl.get = (data) => get(fetchOptionsOverride, data)
