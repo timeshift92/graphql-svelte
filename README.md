@@ -70,6 +70,7 @@ export { get, subscribe };
 # how to use for svelte
 
 --- graphql.js
+
 ```
 
 
@@ -92,7 +93,9 @@ client.graphql.on('cache', reportCacheErrors)
 
 export default client
 ```
+
 --- api.js
+
 ```
 
 import { queries } from "../queries"

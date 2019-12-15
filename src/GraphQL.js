@@ -1,8 +1,8 @@
 
-if (typeof fetch === 'undefined') {
-  var _fetch = require('node-fetch');
-  let fetch = _fetch;
+if (typeof global !== 'undefined') {
+  global.fetch = require('node-fetch')
 }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 import mitt from 'mitt';

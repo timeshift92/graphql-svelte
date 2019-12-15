@@ -1,6 +1,6 @@
 {
   "name": "graphql-svelte",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "description": "graphql fetcher alternate apollo client",
   "main": "index.js",
   "scripts": {
@@ -73,8 +73,13 @@
   "dependencies": {
     "extract-files": "^5.0.1",
     "fnv1a": "^1.0.1",
+    "graphql-subscriptions": "^0.3.1",
     "graphql-subscriptions-client": "^0.12.0",
-    "mitt": "^1.2.0"
+    "graphql-tools": "^4.0.6",
+    "isomorphic-ws": "^4.0.1",
+    "mitt": "^1.2.0",
+    "subscriptions-transport-ws": "^0.5.5",
+    "ws": "^7.2.0"
   },
   "repository": {
     "type": "git",

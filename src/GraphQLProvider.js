@@ -82,7 +82,7 @@ const client = (options) => {
   cl.get = (data) => get(fetchOptionsOverride, data)
   cl.restore = (data) => restore(fetchOptionsOverride, data)
   cl.query = (data) => observe(get(fetchOptionsOverride, data))
-  cl.mutate = (data) => observe(get(fetchOptionsOverride, data))
+  cl.mutate = (data) => get(fetchOptionsOverride, data)
   cl.graphql = graphql;
   return {
     ...cl

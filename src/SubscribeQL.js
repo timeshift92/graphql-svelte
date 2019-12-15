@@ -3,6 +3,12 @@ import Backoff from 'backo2'
 import EventEmitter from 'eventemitter3'
 import $$observable from 'symbol-observable'
 
+if (typeof global !== 'undefined') {
+  global.fetch = require('node-fetch')
+  global.WebSocket = require('isomorphic-ws')
+}
+
+
 const WS_TIMEOUT = 30000
 
 function isString(value) {

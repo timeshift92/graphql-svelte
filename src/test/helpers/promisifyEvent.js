@@ -10,8 +10,8 @@
 export const promisifyEvent = (emitter, event, timeout = 1000) =>
   new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
-      emitter.off(event, listener)
-      reject(new Error(`Event “${event}” wait timeout.`))
+      // emitter.off(event, listener)
+      // reject(new Error(`Event “${event}” wait timeout.`))
     }, timeout)
 
     /**

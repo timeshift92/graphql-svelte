@@ -194,19 +194,38 @@ t.test('GraphQL.operate()', async t => {
     // Delete the global fetch polyfill.
     delete global.fetch
 
-    // await t.test(
-    //   'Run query',
-    //   testQuery({
-    //     port,
-    //     expectedResolvedCacheValue: {
-    //       fetchError: 'Global fetch API or polyfill unavailable.'
-    //     },
-    //     expectedResponseType: 'undefined'
-    //   })
-    // )
+    await t.test(
+      'Run query',
+      testQuery({
+        port,
+        expectedResolvedCacheValue: {
+          fetchError: 'Global fetch API or polyfill unavailable.'
+        },
+        expectedResponseType: 'undefined'
+      })
+    )
 
     // Restore the global fetch polyfill.
     global.fetch = fetch
+  })
+
+
+  await t.test('isomorph test', async t => {
+    const port = await startServer(t, createGraphQLKoaApp())
+
+    await t.test(
+      'Run query',
+      testQuery({
+        port,
+        expectedResolvedCacheValue: {
+          data: {
+            "echo":"hello"
+          }
+        },
+        expectedResponseType: 'object'
+      })
+    )
+
   })
 
   await t.test('With HTTP and parse errors', async t => {
@@ -281,7 +300,6 @@ t.test('GraphQL.operate()', async t => {
 
   await t.test('With HTTP and GraphQL errors', async t => {
     const port = await startServer(t, createGraphQLKoaApp())
-    console.log(port)
     await t.test(
       'Run query',
       testQuery({
