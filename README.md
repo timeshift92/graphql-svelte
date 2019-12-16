@@ -78,11 +78,11 @@ import { GraphQLProvider, reportCacheErrors } from "graphql-svelte";
 
 const client = GraphQLProvider({
     url: 'http://localhost:8082/v1/graphql',
-    headers: {
+    headers: () => ({
         "content-type": "application/json",
         Accept: 'application/json',
         "x-hasura-admin-secret": "secret"
-    },
+    }),
     ws: {
         url: 'ws://localhost:8082/v1/graphql'
     }
