@@ -34,7 +34,7 @@ const initSub = (ws, headers) => new SubscribeQL(ws.url, {
   lazy: ws.lazy || true,
   ...ws.connectionParams ? { connectionParams: ws.connectionParams } : {
     connectionParams: () => {
-      return { headers }
+      return { headers: { ...headers() } }
     }
   }
 });
@@ -76,7 +76,7 @@ const client = (options) => {
 
   const fetchOptionsOverride = _options => {
     (_options.url = options.url),
-      (_options.headers = options.headers);
+      (_options.headers = options.headers());
   };
 
   cl.get = (data) => get(fetchOptionsOverride, data)
