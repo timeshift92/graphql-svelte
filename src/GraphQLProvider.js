@@ -3,7 +3,7 @@ import { observe } from 'svelte-observable';
 const graphql = new GraphQL();
 
 
-let get = async (fetchOptionsOverride, data) => {
+let get = async (fetchOptionsOverride, data, withCache = true) => {
 
   const fetchOptions = graphqlFetchOptions({
     ...data
@@ -12,7 +12,11 @@ let get = async (fetchOptionsOverride, data) => {
   fetchOptionsOverride(fetchOptions)
   const has = hashObject(fetchOptions);
 
-  if (graphql.cache[has]) {
+  if (graphql.cache[has] && graphql.cache[has].graphQLErrors) {
+    delete graphql.cache[has]
+  }
+
+  if (graphql.cache[has] && withCache) {
     return new Promise((resolve, reject) => {
       resolve(graphql.cache[has]);
     });
@@ -48,6 +52,7 @@ function restore(fetchOptionsOverride, data) {
     fetchOptionsOverride(fetchOptions)
     const has = hashObject(fetchOptions);
 
+
     if (graphql.cache[has]) {
       graphql.cache[has] = data
     }
@@ -79,10 +84,10 @@ const client = (options) => {
       (_options.headers = options.headers());
   };
 
-  cl.get = (data) => get(fetchOptionsOverride, data)
+  cl.get = (data, cache) => get(fetchOptionsOverride, data, cache)
   cl.restore = (data) => restore(fetchOptionsOverride, data)
-  cl.query = (data) => observe(get(fetchOptionsOverride, data))
-  cl.mutate = (data) => get(fetchOptionsOverride, data)
+  cl.query = (data, cache = false) => observe(get(fetchOptionsOverride, data, cache))
+  cl.mutate = (data, cache = false) => get(fetchOptionsOverride, data, cache)
   cl.graphql = graphql;
   return {
     ...cl
