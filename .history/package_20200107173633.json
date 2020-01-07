@@ -71,7 +71,7 @@
     "node": ">=8.5"
   },
   "dependencies": {
-    "svelte-observable":"0.4.0",
+    "svelte-observable":""
     "extract-files": "^5.0.1",
     "fnv1a": "^1.0.1",
     "graphql-subscriptions": "^0.3.1",
