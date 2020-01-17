@@ -43,7 +43,7 @@ const initSub = (ws, headers) => new SubscribeQL(ws.url, {
   }
 });
 
-function restore(fetchOptionsOverride, data) {
+function restore(fetchOptionsOverride, data, cache) {
 
   if (data) {
     const fetchOptions = graphqlFetchOptions({
@@ -54,7 +54,7 @@ function restore(fetchOptionsOverride, data) {
 
 
     if (graphql.cache[has]) {
-      graphql.cache[has] = data
+      graphql.cache[has] = cache
     }
     return graphql.cache[has]
 
@@ -85,7 +85,7 @@ const client = (options) => {
   };
 
   cl.get = (data, cache) => get(fetchOptionsOverride, data, cache)
-  cl.restore = (data) => restore(fetchOptionsOverride, data)
+  cl.restore = (data, cache) => restore(fetchOptionsOverride, data, cache)
   cl.query = (data, cache = false) => observe(get(fetchOptionsOverride, data, cache))
   cl.mutate = (data, cache = false) => get(fetchOptionsOverride, data, cache)
   cl.graphql = graphql;
