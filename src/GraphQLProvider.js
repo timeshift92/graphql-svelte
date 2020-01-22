@@ -73,6 +73,7 @@ const client = (options) => {
     options.headers = { "content-type": "application/json" }
   if (options.ws) {
     let sub = initSub(options.ws, options.headers)
+    cl.subsctiption = sub;
     cl.subscribe = (data) => subscribe(sub, data)
   }
   if (!options.url) {
