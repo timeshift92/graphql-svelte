@@ -2272,12 +2272,12 @@ function SubscribeQL(url, options) {
 
 const graphql = new GraphQL();
 
-function cacheWritable(key) {
+function cacheWritable(initial, key) {
   const {
     subscribe,
     set,
     update
-  } = writable(graphql.cache[key]);
+  } = writable(initial);
   return {
     subscribe,
     set: val => {
@@ -2299,7 +2299,7 @@ function getOrSet(fetchOptionsOverride, data, withCache = true, getKey = key => 
   }
 
   if (graphql.cache[has] && withCache) {
-    return graphql.cache[has];
+    return new Promise(res => res(graphql.cache[has]));
   }
 
   const pending = graphql.operate({
@@ -2314,10 +2314,12 @@ let get$1 = (fetchOptionsOverride, data, withCache = true) => {
   return getOrSet(fetchOptionsOverride, data, withCache);
 };
 
-let query = async (fetchOptionsOverride, data, withCache = true) => {
+let query = (fetchOptionsOverride, data, withCache = true) => {
   let key = '';
-  await getOrSet(fetchOptionsOverride, data, withCache, _key => key = _key);
-  return cacheWritable(key);
+  const initial = new Promise(res => resolve = res);
+  getOrSet(fetchOptionsOverride, data, withCache, _key => key = _key).then(result => dt.set(graphql.cache[key]));
+  const dt = cacheWritable(initial, key);
+  return dt;
 };
 
 const initSub = (ws, headers) => new SubscribeQL(ws.url, {
