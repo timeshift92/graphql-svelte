@@ -2316,7 +2316,7 @@ let get$1 = (fetchOptionsOverride, data, withCache = true) => {
 
 let query = (fetchOptionsOverride, data, withCache = true) => {
   let key = '';
-  const initial = new Promise(res => resolve = res);
+  const initial = new Promise(res => res);
   getOrSet(fetchOptionsOverride, data, withCache, _key => key = _key).then(result => dt.set(graphql.cache[key]));
   const dt = cacheWritable(initial, key);
   return dt;
