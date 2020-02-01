@@ -17,6 +17,7 @@ export default {
     name: 'app',
     file: 'dist/graphql-svelte.esm.js' ,
   }
+
 ],
   plugins: [
     resolve({
@@ -65,8 +66,8 @@ export default {
     }),
     commonjs(),
 
-    terser(),
-    gzipPlugin(),
+    // terser(),
+    // gzipPlugin(),
   ],
 
 }

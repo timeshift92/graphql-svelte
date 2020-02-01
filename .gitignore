@@ -2,7 +2,7 @@ node_modules/
 yarn.lock
 yarn-error.log
 package-lock.json
-dist/
+# dist/
 .DS_Store
 .env
 .nyc_output/
