@@ -1,25 +1,31 @@
 import { GraphQL, graphqlFetchOptions, hashObject, SubscribeQL } from "../index";
-import { observe } from 'svelte-observable';
+import { writable } from 'svelte/store';
 const graphql = new GraphQL();
 
+function cacheWritable(key) {
+  const { subscribe, set, update } = writable(graphql.cache[key]);
 
-let get = async (fetchOptionsOverride, data, withCache = true) => {
+  return {
+    subscribe,
+    set: (val) => { graphql.cache[key] = val; set(val) }
+  };
+}
 
+function getOrSet(fetchOptionsOverride, data, withCache = true, getKey = (key) => key) {
   const fetchOptions = graphqlFetchOptions({
     ...data
   });
 
   fetchOptionsOverride(fetchOptions)
   const has = hashObject(fetchOptions);
+  getKey(has);
 
   if (graphql.cache[has] && graphql.cache[has].graphQLErrors) {
     delete graphql.cache[has]
   }
 
   if (graphql.cache[has] && withCache) {
-    return new Promise((resolve, reject) => {
-      resolve(graphql.cache[has]);
-    });
+    return graphql.cache[has];
   }
 
   const pending = graphql.operate({
@@ -28,8 +34,18 @@ let get = async (fetchOptionsOverride, data, withCache = true) => {
       ...data
     }
   });
-  let res = await pending.cacheValuePromise;
-  return new Promise((resolve, reject) => { res.data ? resolve(res) : reject(res) })
+  return pending.cacheValuePromise;
+}
+
+
+let get = (fetchOptionsOverride, data, withCache = true) => {
+  return getOrSet(fetchOptionsOverride, data, withCache)
+}
+
+let query = async (fetchOptionsOverride, data, withCache = true) => {
+  let key = ''
+  await getOrSet(fetchOptionsOverride, data, withCache, (_key) => key = _key)
+  return cacheWritable(key)
 }
 
 
@@ -63,7 +79,7 @@ function restore(fetchOptionsOverride, data, cache) {
 }
 
 const subscribe = (sub, query) => {
-  return observe(sub.request(query));
+  return sub.request(query);
 }
 
 
@@ -73,7 +89,7 @@ const client = (options) => {
     options.headers = { "content-type": "application/json" }
   if (options.ws) {
     let sub = initSub(options.ws, options.headers)
-    cl.subsctiption = sub;
+    cl.subscription = sub;
     cl.subscribe = (data) => subscribe(sub, data)
   }
   if (!options.url) {
@@ -87,7 +103,7 @@ const client = (options) => {
 
   cl.get = (data, cache) => get(fetchOptionsOverride, data, cache)
   cl.restore = (data, cache) => restore(fetchOptionsOverride, data, cache)
-  cl.query = (data, cache = false) => observe(get(fetchOptionsOverride, data, cache))
+  cl.query = (data, cache) => query(fetchOptionsOverride, data, cache)
   cl.mutate = (data, cache = false) => get(fetchOptionsOverride, data, cache)
   cl.graphql = graphql;
   return {
