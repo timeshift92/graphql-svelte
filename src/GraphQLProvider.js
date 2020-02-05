@@ -11,7 +11,8 @@ function cacheWritable(initial, key) {
   } = writable(initial);
   return {
     subscribe,
-    set: val => {
+    set: (callback = (data) => data) => {
+      const val = callback(graphql.cache[key])
       graphql.cache[key] = val;
       set(val);
     }
@@ -51,10 +52,10 @@ let get = (fetchOptionsOverride, data, withCache = true) => {
 
 let query = (fetchOptionsOverride, data, withCache = true) => {
   let key = '';
-  const initial = new Promise(res =>  res);
+  const initial = new Promise(res => res);
   getOrSet(fetchOptionsOverride, data, withCache, _key => key = _key).then(
     result =>
-      dt.set(graphql.cache[key])
+      dt.set(() => graphql.cache[key])
   );
   const dt = cacheWritable(initial, key)
 
