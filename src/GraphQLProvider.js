@@ -52,10 +52,13 @@ let get = (fetchOptionsOverride, data, withCache = true) => {
 
 let query = (fetchOptionsOverride, data, withCache = true) => {
   let key = '';
-  const initial = new Promise(res => res);
+  let resolver;
+  const initial = new Promise(res => resolver = res);
   getOrSet(fetchOptionsOverride, data, withCache, _key => key = _key).then(
-    result =>
+    result => {
       dt.set(() => graphql.cache[key])
+      resolver(Promise.resolve(graphql.cache[key]))
+    }
   );
   const dt = cacheWritable(initial, key)
 
