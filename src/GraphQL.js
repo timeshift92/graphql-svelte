@@ -1,11 +1,7 @@
-
-if (typeof global !== 'undefined') {
-  global.fetch = require('node-fetch')
-}
+import 'isomorphic-unfetch';
 import mitt from 'mitt'
 import { graphqlFetchOptions } from './graphqlFetchOptions.js'
 import { hashObject } from './hashObject.js'
-import {writable} from 'svelte/store';
 /**
  * A lightweight GraphQL client that caches queries and mutations.
  * @kind class
@@ -140,9 +136,9 @@ export class GraphQL {
       typeof fetch === 'function'
         ? fetch
         : () =>
-            Promise.reject(
-              new Error('Global fetch API or polyfill unavailable.')
-            )
+          Promise.reject(
+            new Error('Global fetch API or polyfill unavailable.')
+          )
     const cacheValue = {}
     const cacheValuePromise = fetcher(url, options)
       .then(
@@ -174,15 +170,16 @@ export class GraphQL {
       )
       .then(() => {
         // Cache the operation.
-        this.cache[cacheKey] = cacheValue
+        if (!cacheValue.graphQLErrors && !cacheValue.parseError)
+          this.cache[cacheKey] = cacheValue
 
-        // Clear the loaded operation.
-        delete this.operations[cacheKey]
+        // If there are no more operations loading for this cache key, delete
+        // the empty array from the `operations` property.
+        if (!this.operations[cacheKey].length)
+          delete this.operations[cacheKey];
 
         this.emit('cache', {
-          cacheKey,
-          cacheValue,
-
+          cacheKey, cacheValue,
           // May be undefined if there was a fetch error.
           response: fetchResponse
         })
@@ -212,16 +209,9 @@ export class GraphQL {
    * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
    * @returns {GraphQLOperationLoading} Loading GraphQL operation details.
    */
-  operate = ({
-    operation,
-    fetchOptionsOverride,
-    reloadOnLoad,
-    resetOnLoad
-  }) => {
+  operate = ({ operation, fetchOptionsOverride, reloadOnLoad, resetOnLoad }) => {
     if (reloadOnLoad && resetOnLoad)
-      throw new Error(
-        'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
-      )
+      throw new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.')
 
     const fetchOptions = graphqlFetchOptions(operation)
     if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)

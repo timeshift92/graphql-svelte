@@ -1,9 +1,9 @@
 export { GraphQL } from './GraphQL'
 export { reportCacheErrors } from './reportCacheErrors'
-export {graphqlFetchOptions} from './graphqlFetchOptions'
-export {hashObject} from './hashObject'
-export { SubscribeQL} from './SubscribeQL';
-export { GraphQLProvider} from './GraphQLProvider';
+export { graphqlFetchOptions } from './graphqlFetchOptions'
+export { hashObject } from './hashObject'
+export { SubscribeQL } from './SubscribeQL';
+export { GraphQLSvelte } from './GraphQLSvelte';
 /**
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.
  * @kind typedef

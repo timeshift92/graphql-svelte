@@ -1,28 +1,26 @@
-import { GraphQL, graphqlFetchOptions, hashObject, SubscribeQL } from './';
+import { GraphQL } from './GraphQL';
+import { graphqlFetchOptions } from './graphqlFetchOptions'
+import { hashObject } from './hashObject'
+import { SubscribeQL } from './SubscribeQL'
+
 import { writable } from 'svelte/store';
 const graphql = new GraphQL();
 
 function cacheWritable(initial, key) {
-
   const {
     subscribe,
-    set,
-    update
+    set
   } = writable(initial);
   return {
     subscribe,
     set: (callback = (data) => data) => {
-      const val = callback(graphql.cache[key])
-      graphql.cache[key] = val;
-      set(val);
+      set(graphql.cache[key] = callback(graphql.cache[key]));
     }
   };
 }
 
 function getOrSet(fetchOptionsOverride, data, withCache = true, getKey = (key) => key) {
-  const fetchOptions = graphqlFetchOptions({
-    ...data
-  });
+  const fetchOptions = graphqlFetchOptions({ ...data });
 
   fetchOptionsOverride(fetchOptions)
   const has = hashObject(fetchOptions);
@@ -77,14 +75,12 @@ const initSub = (ws, headers) => new SubscribeQL(ws.url, {
 });
 
 function restore(fetchOptionsOverride, data, cache) {
-
   if (data) {
     const fetchOptions = graphqlFetchOptions({
       ...data
     });
     fetchOptionsOverride(fetchOptions)
     const has = hashObject(fetchOptions);
-
 
     if (graphql.cache[has]) {
       graphql.cache[has] = cache
@@ -99,7 +95,6 @@ const subscribe = (sub, query) => {
   return sub.request(query);
 }
 
-
 const client = (options) => {
   let cl = {};
   if (!options.headers)
@@ -110,7 +105,7 @@ const client = (options) => {
     cl.subscribe = (data) => subscribe(sub, data)
   }
   if (!options.url) {
-    throw new Error('grpahql endpoint not set');
+    throw new Error('graphql endpoint not set');
   }
 
   const fetchOptionsOverride = _options => {
@@ -122,7 +117,8 @@ const client = (options) => {
   cl.restore = (data, cache) => restore(fetchOptionsOverride, data, cache)
   cl.query = (data, cache) => query(fetchOptionsOverride, data, cache)
   cl.mutate = (data, cache = false) => get(fetchOptionsOverride, data, cache)
-  cl.graphql = graphql;
+
+  cl = Object.assign(cl, graphql)
   return {
     ...cl
   }
@@ -131,4 +127,4 @@ const client = (options) => {
 
 
 
-export { client as GraphQLProvider };
+export { client as GraphQLSvelte };

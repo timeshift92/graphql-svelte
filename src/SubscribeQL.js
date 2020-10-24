@@ -1,13 +1,7 @@
 
-import Backoff from 'backo2'
-import EventEmitter from 'eventemitter3'
+import Backoff from 'backo'
+import mitt from 'mitt'
 import $$observable from 'symbol-observable'
-
-if (typeof global !== 'undefined') {
-  global.fetch = require('node-fetch')
-  global.WebSocket = require('isomorphic-ws')
-}
-
 
 const WS_TIMEOUT = 30000
 
@@ -44,7 +38,7 @@ export class SubscriptionClient {
     this.inactivityTimeout = inactivityTimeout
     this.closedByUser = false
     this.backoff = new Backoff({ jitter: 0.5 })
-    this.eventEmitter = new EventEmitter()
+    this.eventEmitter = mitt()
     this.client = null
     this.maxConnectTimeGenerator = this.createMaxConnectTimeGenerator()
     this.connectionParams = this.getConnectionParams(connectionParams)
@@ -496,20 +490,12 @@ export class SubscriptionClient {
         break
 
       case 'error':
-        this.operations[opId].handler(
-          this.formatErrors(parsedMessage.payload),
-          null
-        )
+        this.operations[opId].handler(this.formatErrors(parsedMessage.payload),null)
         delete this.operations[opId]
         break
 
       case 'data':
-        const parsedPayload = !parsedMessage.payload.errors
-          ? parsedMessage.payload
-          : {
-            ...parsedMessage.payload,
-            errors: this.formatErrors(parsedMessage.payload.errors)
-          }
+        const parsedPayload = !parsedMessage.payload.errors ? parsedMessage.payload : {...parsedMessage.payload, errors: this.formatErrors(parsedMessage.payload.errors) }
         this.operations[opId].handler(null, parsedPayload)
         break
 

@@ -28,7 +28,7 @@ export default {
       babelrc: false,
       extensions: ['.js','.mjs', '.jsx', '.es6', '.es', '.mjs', '.html', '.svelte'],
       exclude: [
-        'node_modules/core-js/**',
+        // 'node_modules/core-js/**',
         'node_modules/babel-runtime/**',
         'node_modules/@babel/runtime/**',
       ],
@@ -39,9 +39,9 @@ export default {
           {
             modules: false,
             debug: false,
-            useBuiltIns: 'usage',
-            corejs: 3,
-            shippedProposals: true,
+            // useBuiltIns: 'usage',
+            // corejs: 3,
+            // shippedProposals: true,
             forceAllTransforms: false,
             targets: {
               browsers: [
@@ -56,7 +56,7 @@ export default {
         ["@babel/plugin-transform-object-assign"],
         ["@babel/plugin-transform-runtime",{
           "absoluteRuntime": false,
-          "corejs": false,
+          // "corejs": false,
           "helpers": true,
           "regenerator": true,
           "useESModules": true,
@@ -66,8 +66,8 @@ export default {
     }),
     commonjs(),
 
-    // terser(),
-    // gzipPlugin(),
+    terser(),
+    gzipPlugin(),
   ],
 
 }
