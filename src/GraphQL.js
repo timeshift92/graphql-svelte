@@ -1,4 +1,4 @@
-import 'isomorphic-unfetch';
+import 'unfetch'
 import mitt from 'mitt'
 import { graphqlFetchOptions } from './graphqlFetchOptions.js'
 import { hashObject } from './hashObject.js'

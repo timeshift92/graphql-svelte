@@ -1,8 +1,8 @@
 {
   "name": "graphql-svelte",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "graphql fetcher alternate apollo client",
-  "main": "dist/graphql-svelte.esm.js",
+  "main": "dist/graphql-svelte.js",
   "scripts": {
     "clean": "rm -rf public/dist*",
     "build": "rollup -c",
@@ -87,7 +87,7 @@
   "dependencies": {
     "backo": "^1.1.0",
     "fnv1a": "^1.0.1",
-    "isomorphic-unfetch": "^3.1.0",
+    "unfetch":"^4.2.0",
     "mitt": "^1.2.0",
     "symbol-observable": "^2.0.3"
   },
