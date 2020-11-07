@@ -1,6 +1,6 @@
 {
   "name": "graphql-svelte",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "graphql fetcher alternate apollo client",
   "main": "dist/graphql-svelte.js",
   "scripts": {

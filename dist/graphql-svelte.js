@@ -1,2 +1,1033 @@
-var app=function(e){"use strict";function t(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function n(e){return e=e||Object.create(null),{on:function(t,n){(e[t]||(e[t]=[])).push(n)},off:function(t,n){e[t]&&e[t].splice(e[t].indexOf(n)>>>0,1)},emit:function(t,n){(e[t]||[]).slice().map((function(e){e(n)})),(e["*"]||[]).slice().map((function(e){e(t,n)}))}}}function s(e){const t={url:"/graphql",method:"POST",headers:{Accept:"application/json"}};return t.headers["Content-Type"]="application/json",t.body=JSON.stringify(e),t}function o(e){for(var t=o.BASE,n=0,s=e.length;n<s;n++)t^=e.charCodeAt(n),t+=(t<<1)+(t<<4)+(t<<7)+(t<<8)+(t<<24);return t>>>0}o.BASE=2166136261;var r=o;function i(e,t){const n=this[e];if("undefined"!=typeof FormData&&n instanceof FormData){let e="";const t=n.entries();let s=t.next();for(;!s.done;){const[n,o]=s.value;e+="".concat(n).concat(o),s=t.next()}return e}return t}const c=e=>r(JSON.stringify(e,i)).toString(36);class a{constructor({cache:e={}}={}){t(this,"reload",e=>{this.emit("reload",{exceptCacheKey:e})}),t(this,"reset",e=>{let t=Object.keys(this.cache);e&&(t=t.filter(t=>t!==e)),t.forEach(e=>delete this.cache[e]),this.emit("reset",{exceptCacheKey:e})}),t(this,"fetch",({url:e,...t},n)=>{let s;const o="function"==typeof fetch?fetch:()=>Promise.reject(new Error("Global fetch API or polyfill unavailable.")),r={},i=o(e,t).then(e=>(s=e,e.ok||(r.httpError={status:e.status,statusText:e.statusText}),e.json().then(({errors:e,data:t})=>{e||t||(r.parseError="Malformed payload."),e&&(r.graphQLErrors=e),t&&(r.data=t)},({message:e})=>{r.parseError=e})),({message:e})=>{r.fetchError=e}).then(()=>(r.graphQLErrors||r.parseError||(this.cache[n]=r),this.operations[n].length||delete this.operations[n],this.emit("cache",{cacheKey:n,cacheValue:r,response:s}),r));return this.operations[n]=i,this.emit("fetch",{cacheKey:n,cacheValuePromise:i}),i}),t(this,"operate",({operation:e,fetchOptionsOverride:t,reloadOnLoad:n,resetOnLoad:o})=>{if(n&&o)throw new Error("operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.");const r=s(e);t&&t(r);const i=c(r),a=this.operations[i]||this.fetch(r,i);return a.then(()=>{n?this.reload(i):o&&this.reset(i)}),{cacheKey:i,cacheValue:this.cache[i],cacheValuePromise:a}});const{on:o,off:r,emit:i}=n();this.on=o,this.off=r,this.emit=i,this.cache=e,this.operations={}}}function h(){return(h=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var s in n)Object.prototype.hasOwnProperty.call(n,s)&&(e[s]=n[s])}return e}).apply(this,arguments)}var l=u;function u(e){e=e||{},this.ms=e.min||100,this.max=e.max||1e4,this.factor=e.factor||2,this.jitter=e.jitter>0&&e.jitter<=1?e.jitter:0,this.attempts=0}u.prototype.duration=function(){var e=this.ms*Math.pow(this.factor,this.attempts++);if(this.jitter){var t=Math.random(),n=Math.floor(t*this.jitter*e);e=0==(1&Math.floor(10*t))?e-n:e+n}return 0|Math.min(e,this.max)},u.prototype.reset=function(){this.attempts=0};var p=function(e){var t,n=e.Symbol;if("function"==typeof n)if(n.observable)t=n.observable;else{t=n.for("https://github.com/benlesh/symbol-observable");try{n.observable=t}catch(e){}}else t="@@observable";return t}("undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof module?module:Function("return this")());const d=3e4;function m(e){return"string"==typeof e}class f{constructor(e,t){const{connectionCallback:s,connectionParams:o={},timeout:r=d,reconnect:i=!1,reconnectionAttempts:c=1/0,lazy:a=!1,inactivityTimeout:h=0}=t||{};this.wsImpl=WebSocket,this.connectionCallback=s,this.url=e,this.operations={},this.nextOperationId=0,this.wsTimeout=r,this.unsentMessagesQueue=[],this.reconnect=i,this.reconnecting=!1,this.reconnectionAttempts=c,this.lazy=!!a,this.inactivityTimeout=h,this.closedByUser=!1,this.backoff=new l({jitter:.5}),this.eventEmitter=n(),this.client=null,this.maxConnectTimeGenerator=this.createMaxConnectTimeGenerator(),this.connectionParams=this.getConnectionParams(o),this.lazy||this.connect()}get status(){return null===this.client?this.wsImpl.CLOSED:this.client.readyState}close(e=!0,t=!0){this.clearInactivityTimeout(),null!==this.client&&(this.closedByUser=t,e&&(this.clearCheckConnectionInterval(),this.clearMaxConnectTimeout(),this.clearTryReconnectTimeout(),this.unsubscribeAll(),this.sendMessage(void 0,"connection_terminate",null)),this.client.close(),this.client=null,this.eventEmitter.emit("disconnected"),e||this.tryReconnect())}request(e){const t=this.getObserver.bind(this),n=this.executeOperation.bind(this),s=this.unsubscribe.bind(this);let o;return this.clearInactivityTimeout(),{[p.default?p.default:p](){return this},subscribe(r,i,c){const a=t(r,i,c);return o=n(e,(e,t)=>{null===e&&null===t?a.complete&&a.complete():e?a.error&&a.error(e[0]):a.next&&a.next(t)}),{unsubscribe:()=>{o&&(s(o),o=null)}}}}}on(e,t,n){const s=this.eventEmitter.on(e,t,n);return()=>{s.off(e,t,n)}}onConnected(e,t){return this.on("connected",e,t)}onConnecting(e,t){return this.on("connecting",e,t)}onDisconnected(e,t){return this.on("disconnected",e,t)}onReconnected(e,t){return this.on("reconnected",e,t)}onReconnecting(e,t){return this.on("reconnecting",e,t)}onError(e,t){return this.on("error",e,t)}unsubscribeAll(){Object.keys(this.operations).forEach(e=>{this.unsubscribe(e)})}getConnectionParams(e){return()=>new Promise((t,n)=>{if("function"==typeof e)try{return t(e(null))}catch(e){return n(e)}t(e)})}executeOperation(e,t){null===this.client&&this.connect();const n=this.generateOperationId();this.operations[n]={options:e,handler:t};try{this.checkOperationOptions(e,t),this.operations[n]&&(this.operations[n]={options:e,handler:t},this.sendMessage(n,"start",e))}catch(e){this.unsubscribe(n),t(this.formatErrors(e))}return n}getObserver(e,t,n){return"function"==typeof e?{next:t=>e(t),error:e=>t&&t(e),complete:()=>n&&n()}:e}createMaxConnectTimeGenerator(){const e=this.wsTimeout;return new l({min:1e3,max:e,factor:1.2})}clearCheckConnectionInterval(){this.checkConnectionIntervalId&&(clearInterval(this.checkConnectionIntervalId),this.checkConnectionIntervalId=null)}clearMaxConnectTimeout(){this.maxConnectTimeoutId&&(clearTimeout(this.maxConnectTimeoutId),this.maxConnectTimeoutId=null)}clearTryReconnectTimeout(){this.tryReconnectTimeoutId&&(clearTimeout(this.tryReconnectTimeoutId),this.tryReconnectTimeoutId=null)}clearInactivityTimeout(){this.inactivityTimeoutId&&(clearTimeout(this.inactivityTimeoutId),this.inactivityTimeoutId=null)}setInactivityTimeout(){this.inactivityTimeout>0&&0===Object.keys(this.operations).length&&(this.inactivityTimeoutId=setTimeout(()=>{0===Object.keys(this.operations).length&&this.close()},this.inactivityTimeout))}checkOperationOptions(e,t){const{query:n,variables:s,operationName:o}=e;if(!n)throw new Error("Must provide a query.");if(!t)throw new Error("Must provide an handler.");if(!m(n)||o&&!m(o)||s&&(null===(r=s)||"object"!=typeof r))throw new Error("Incorrect option types. query must be a string,`operationName` must be a string, and `variables` must be an object.");var r}buildMessage(e,t,n){return{id:e,type:t,payload:n&&n.query?h({},n,{query:n.query}):n}}formatErrors(e){return Array.isArray(e)?e:e&&e.errors?this.formatErrors(e.errors):e&&e.message?[e]:[{name:"FormatedError",message:"Unknown error",originalError:e}]}sendMessage(e,t,n){this.sendMessageRaw(this.buildMessage(e,t,n))}sendMessageRaw(e){switch(this.status){case this.wsImpl.OPEN:const t=JSON.stringify(e);try{JSON.parse(t)}catch(t){this.eventEmitter.emit("error",new Error("Message must be JSON-serializable. Got: ".concat(e)))}this.client.send(t);break;case this.wsImpl.CONNECTING:this.unsentMessagesQueue.push(e);break;default:this.reconnecting||this.eventEmitter.emit("error",new Error("A message was not sent because socket is not connected, is closing or is already closed. Message was: "+JSON.stringify(e)))}}generateOperationId(){return String(++this.nextOperationId)}tryReconnect(){if(!this.reconnect||this.backoff.attempts>=this.reconnectionAttempts)return;this.reconnecting||(Object.keys(this.operations).forEach(e=>{this.unsentMessagesQueue.push(this.buildMessage(e,"start",this.operations[e].options))}),this.reconnecting=!0),this.clearTryReconnectTimeout();const e=this.backoff.duration();this.tryReconnectTimeoutId=setTimeout(()=>{this.connect()},e)}flushUnsentMessagesQueue(){this.unsentMessagesQueue.forEach(e=>{this.sendMessageRaw(e)}),this.unsentMessagesQueue=[]}checkConnection(){this.wasKeepAliveReceived?this.wasKeepAliveReceived=!1:this.reconnecting||this.close(!1,!0)}checkMaxConnectTimeout(){this.clearMaxConnectTimeout(),this.maxConnectTimeoutId=setTimeout(()=>{this.status!==this.wsImpl.OPEN&&(this.reconnecting=!0,this.close(!1,!0))},this.maxConnectTimeGenerator.duration())}connect(){this.client=new WebSocket(this.url,"graphql-ws"),this.checkMaxConnectTimeout(),this.client.addEventListener("open",async()=>{if(this.status===this.wsImpl.OPEN){this.clearMaxConnectTimeout(),this.closedByUser=!1,this.eventEmitter.emit(this.reconnecting?"reconnecting":"connecting");try{const e=await this.connectionParams();this.sendMessage(void 0,"connection_init",e),this.flushUnsentMessagesQueue()}catch(e){this.sendMessage(void 0,"connection_error",e),this.flushUnsentMessagesQueue()}}}),this.client.onclose=()=>{this.closedByUser||this.close(!1,!1)},this.client.addEventListener("error",e=>{this.eventEmitter.emit("error",e)}),this.client.addEventListener("message",({data:e})=>{this.processReceivedData(e)})}processReceivedData(e){let t,n;try{t=JSON.parse(e),n=t.id}catch(t){throw new Error("Message must be JSON-parseable. Got: ".concat(e))}if(!["data","complete","error"].includes(t.type)||this.operations[n])switch(t.type){case"connection_error":this.connectionCallback&&this.connectionCallback(t.payload);break;case"connection_ack":this.eventEmitter.emit(this.reconnecting?"reconnected":"connected"),this.reconnecting=!1,this.backoff.reset(),this.maxConnectTimeGenerator.reset(),this.connectionCallback&&this.connectionCallback();break;case"complete":this.operations[n].handler(null,null),delete this.operations[n];break;case"error":this.operations[n].handler(this.formatErrors(t.payload),null),delete this.operations[n];break;case"data":const e=t.payload.errors?{...t.payload,errors:this.formatErrors(t.payload.errors)}:t.payload;this.operations[n].handler(null,e);break;case"ka":const s=void 0===this.wasKeepAliveReceived;this.wasKeepAliveReceived=!0,s&&this.checkConnection(),this.checkConnectionIntervalId&&(clearInterval(this.checkConnectionIntervalId),this.checkConnection()),this.checkConnectionIntervalId=setInterval(this.checkConnection.bind(this),this.wsTimeout);break;default:throw new Error("Invalid message type!")}else this.unsubscribe(n)}unsubscribe(e){this.operations[e]&&(delete this.operations[e],this.setInactivityTimeout(),this.sendMessage(e,"stop",void 0))}}function b(e,t){return new f(e,t)}function g(){}const y=[];const v=new a;function E(e,t){const{subscribe:n,set:s}=function(e,t=g){let n;const s=[];function o(t){if(r=t,((o=e)!=o?r==r:o!==r||o&&"object"==typeof o||"function"==typeof o)&&(e=t,n)){const t=!y.length;for(let t=0;t<s.length;t+=1){const n=s[t];n[1](),y.push(n,e)}if(t){for(let e=0;e<y.length;e+=2)y[e][0](y[e+1]);y.length=0}}var o,r}return{set:o,update:function(t){o(t(e))},subscribe:function(r,i=g){const c=[r,i];return s.push(c),1===s.length&&(n=t(o)||g),r(e),()=>{const e=s.indexOf(c);-1!==e&&s.splice(e,1),0===s.length&&(n(),n=null)}}}}(e);return{subscribe:n,set:(e=(e=>e))=>{s(v.cache[t]=e(v.cache[t]))}}}function w(e,t,n=!0,o=(e=>e)){const r=s({...t});e(r);const i=c(r);if(o(i),v.cache[i]&&v.cache[i].graphQLErrors&&delete v.cache[i],v.cache[i]&&n)return new Promise(e=>e(v.cache[i]));return v.operate({fetchOptionsOverride:e,operation:{...t}}).cacheValuePromise}let T=(e,t,n=!0)=>w(e,t,n);return e.GraphQL=a,e.GraphQLSvelte=e=>{let t={};if(e.headers||(e.headers={"content-type":"application/json"}),e.ws){let s=(n=e.ws,o=e.headers,new b(n.url,{reconnect:n.reconnect||!0,lazy:n.lazy||!0,...n.connectionParams?{connectionParams:n.connectionParams}:{connectionParams:()=>({headers:{...o()}})}}));t.subscription=s,t.subscribe=e=>((e,t)=>e.request(t))(s,e)}var n,o;if(!e.url)throw new Error("graphql endpoint not set");const r=t=>{t.url=e.url,t.headers=e.headers()};return t.get=(e,t)=>T(r,e,t),t.restore=(e,t)=>function(e,t,n){if(t){const o=s({...t});e(o);const r=c(o);return v.cache[r]&&(v.cache[r]=n),v.cache[r]}}(r,e,t),t.query=(e,t)=>((e,t,n=!0)=>{let s,o="";const r=new Promise(e=>s=e);w(e,t,n,e=>o=e).then(e=>{i.set(()=>v.cache[o]),s(Promise.resolve(v.cache[o]))});const i=E(r,o);return i})(r,e,t),t.mutate=(e,t=!1)=>T(r,e,t),t=h(t,v),{...t}},e.SubscribeQL=b,e.graphqlFetchOptions=s,e.hashObject=c,e.reportCacheErrors=function({cacheKey:e,cacheValue:{fetchError:t,httpError:n,parseError:s,graphQLErrors:o}}){(t||n||s||o)&&(console.groupCollapsed("GraphQL cache errors for key “".concat(e,"”:")),t&&(console.groupCollapsed("Fetch:"),console.log(t),console.groupEnd()),n&&(console.groupCollapsed("HTTP:"),console.log("Status: ".concat(n.status)),console.log("Text: ".concat(n.statusText)),console.groupEnd()),s&&(console.groupCollapsed("Parse:"),console.log(s),console.groupEnd()),o&&(console.groupCollapsed("GraphQL:"),o.forEach(({message:e})=>console.log(e)),console.groupEnd()),console.groupEnd())},e}({});
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = global || self, factory(global.app = {}));
+}(this, (function (exports) { 'use strict';
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+
+  function mitt(all) {
+    all = all || Object.create(null);
+    return {
+      on: function on(type, handler) {
+        (all[type] || (all[type] = [])).push(handler);
+      },
+      off: function off(type, handler) {
+        if (all[type]) {
+          all[type].splice(all[type].indexOf(handler) >>> 0, 1);
+        }
+      },
+      emit: function emit(type, evt) {
+        (all[type] || []).slice().map(function (handler) {
+          handler(evt);
+        });
+        (all['*'] || []).slice().map(function (handler) {
+          handler(type, evt);
+        });
+      }
+    };
+  }
+
+  function graphqlFetchOptions(operation) {
+    const fetchOptions = {
+      url: '/graphql',
+      method: 'POST',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+    fetchOptions.headers['Content-Type'] = 'application/json';
+    fetchOptions.body = JSON.stringify(operation);
+    return fetchOptions;
+  }
+
+  hash.BASE = 0x811c9dc5;
+
+  function hash(s) {
+    var h = hash.BASE;
+
+    for (var i = 0, l = s.length; i < l; i++) {
+      h ^= s.charCodeAt(i);
+      h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+    }
+
+    return h >>> 0;
+  }
+
+  var fnv1a = hash;
+
+  function hashObjectReplacer(key, value) {
+    const originalValue = this[key];
+
+    if (typeof FormData !== 'undefined' && originalValue instanceof FormData) {
+      let signature = '';
+      const fields = originalValue.entries();
+      let field = fields.next();
+
+      while (!field.done) {
+        const [name, value] = field.value;
+        signature += "".concat(name).concat(value);
+        field = fields.next();
+      }
+
+      return signature;
+    }
+
+    return value;
+  }
+
+  const hashObject = object => fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36);
+
+  class GraphQL {
+    constructor({
+      cache = {}
+    } = {}) {
+      _defineProperty(this, "reload", exceptCacheKey => {
+        this.emit('reload', {
+          exceptCacheKey
+        });
+      });
+
+      _defineProperty(this, "reset", exceptCacheKey => {
+        let cacheKeys = Object.keys(this.cache);
+        if (exceptCacheKey) cacheKeys = cacheKeys.filter(hash => hash !== exceptCacheKey);
+        cacheKeys.forEach(cacheKey => delete this.cache[cacheKey]);
+        this.emit('reset', {
+          exceptCacheKey
+        });
+      });
+
+      _defineProperty(this, "fetch", ({
+        url,
+        ...options
+      }, cacheKey) => {
+        let fetchResponse;
+        const fetcher = typeof fetch === 'function' ? fetch : () => Promise.reject(new Error('Global fetch API or polyfill unavailable.'));
+        const cacheValue = {};
+        const cacheValuePromise = fetcher(url, options).then(response => {
+          fetchResponse = response;
+          if (!response.ok) cacheValue.httpError = {
+            status: response.status,
+            statusText: response.statusText
+          };
+          return response.json().then(({
+            errors,
+            data
+          }) => {
+            if (!errors && !data) cacheValue.parseError = 'Malformed payload.';
+            if (errors) cacheValue.graphQLErrors = errors;
+            if (data) cacheValue.data = data;
+          }, ({
+            message
+          }) => {
+            cacheValue.parseError = message;
+          });
+        }, ({
+          message
+        }) => {
+          cacheValue.fetchError = message;
+        }).then(() => {
+          if (!cacheValue.graphQLErrors && !cacheValue.parseError) this.cache[cacheKey] = cacheValue;
+          if (!this.operations[cacheKey].length) delete this.operations[cacheKey];
+          this.emit('cache', {
+            cacheKey,
+            cacheValue,
+            response: fetchResponse
+          });
+          return cacheValue;
+        });
+        this.operations[cacheKey] = cacheValuePromise;
+        this.emit('fetch', {
+          cacheKey,
+          cacheValuePromise
+        });
+        return cacheValuePromise;
+      });
+
+      _defineProperty(this, "operate", ({
+        operation,
+        fetchOptionsOverride,
+        reloadOnLoad,
+        resetOnLoad
+      }) => {
+        if (reloadOnLoad && resetOnLoad) throw new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.');
+        const fetchOptions = graphqlFetchOptions(operation);
+        if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
+        const cacheKey = hashObject(fetchOptions);
+        const cacheValuePromise = this.operations[cacheKey] || this.fetch(fetchOptions, cacheKey);
+        cacheValuePromise.then(() => {
+          if (reloadOnLoad) this.reload(cacheKey);else if (resetOnLoad) this.reset(cacheKey);
+        });
+        return {
+          cacheKey,
+          cacheValue: this.cache[cacheKey],
+          cacheValuePromise
+        };
+      });
+
+      const {
+        on,
+        off,
+        emit
+      } = mitt();
+      this.on = on;
+      this.off = off;
+      this.emit = emit;
+      this.cache = cache;
+      this.operations = {};
+    }
+
+  }
+
+  function reportCacheErrors({
+    cacheKey,
+    cacheValue: {
+      fetchError,
+      httpError,
+      parseError,
+      graphQLErrors
+    }
+  }) {
+    if (fetchError || httpError || parseError || graphQLErrors) {
+      console.groupCollapsed("GraphQL cache errors for key \u201C".concat(cacheKey, "\u201D:"));
+
+      if (fetchError) {
+        console.groupCollapsed('Fetch:');
+        console.log(fetchError);
+        console.groupEnd();
+      }
+
+      if (httpError) {
+        console.groupCollapsed('HTTP:');
+        console.log("Status: ".concat(httpError.status));
+        console.log("Text: ".concat(httpError.statusText));
+        console.groupEnd();
+      }
+
+      if (parseError) {
+        console.groupCollapsed('Parse:');
+        console.log(parseError);
+        console.groupEnd();
+      }
+
+      if (graphQLErrors) {
+        console.groupCollapsed('GraphQL:');
+        graphQLErrors.forEach(({
+          message
+        }) => console.log(message));
+        console.groupEnd();
+      }
+
+      console.groupEnd();
+    }
+  }
+
+  function _extends() {
+    _extends = Object.assign || function (target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+      return target;
+    };
+    return _extends.apply(this, arguments);
+  }
+
+  var backo = Backoff;
+
+  function Backoff(opts) {
+    opts = opts || {};
+    this.ms = opts.min || 100;
+    this.max = opts.max || 10000;
+    this.factor = opts.factor || 2;
+    this.jitter = opts.jitter > 0 && opts.jitter <= 1 ? opts.jitter : 0;
+    this.attempts = 0;
+  }
+
+  Backoff.prototype.duration = function () {
+    var ms = this.ms * Math.pow(this.factor, this.attempts++);
+
+    if (this.jitter) {
+      var rand = Math.random();
+      var deviation = Math.floor(rand * this.jitter * ms);
+      ms = (Math.floor(rand * 10) & 1) == 0 ? ms - deviation : ms + deviation;
+    }
+
+    return Math.min(ms, this.max) | 0;
+  };
+
+  Backoff.prototype.reset = function () {
+    this.attempts = 0;
+  };
+
+  function symbolObservablePonyfill(root) {
+    var result;
+    var Symbol = root.Symbol;
+
+    if (typeof Symbol === 'function') {
+      if (Symbol.observable) {
+        result = Symbol.observable;
+      } else {
+        result = Symbol.for('https://github.com/benlesh/symbol-observable');
+
+        try {
+          Symbol.observable = result;
+        } catch (err) {}
+      }
+    } else {
+      result = '@@observable';
+    }
+
+    return result;
+  }
+
+  var root;
+
+  if (typeof self !== 'undefined') {
+    root = self;
+  } else if (typeof window !== 'undefined') {
+    root = window;
+  } else if (typeof global !== 'undefined') {
+    root = global;
+  } else if (typeof module !== 'undefined') {
+    root = module;
+  } else {
+    root = Function('return this')();
+  }
+
+  var result = symbolObservablePonyfill(root);
+
+  const WS_TIMEOUT = 30000;
+
+  function isString(value) {
+    return typeof value === 'string';
+  }
+
+  function isObject(value) {
+    return value !== null && typeof value === 'object';
+  }
+
+  class SubscriptionClient {
+    constructor(url, options) {
+      const {
+        connectionCallback = undefined,
+        connectionParams = {},
+        timeout = WS_TIMEOUT,
+        reconnect = false,
+        reconnectionAttempts = Infinity,
+        lazy = false,
+        inactivityTimeout = 0
+      } = options || {};
+      this.wsImpl = WebSocket;
+      this.connectionCallback = connectionCallback;
+      this.url = url;
+      this.operations = {};
+      this.nextOperationId = 0;
+      this.wsTimeout = timeout;
+      this.unsentMessagesQueue = [];
+      this.reconnect = reconnect;
+      this.reconnecting = false;
+      this.reconnectionAttempts = reconnectionAttempts;
+      this.lazy = !!lazy;
+      this.inactivityTimeout = inactivityTimeout;
+      this.closedByUser = false;
+      this.backoff = new backo({
+        jitter: 0.5
+      });
+      this.eventEmitter = mitt();
+      this.client = null;
+      this.maxConnectTimeGenerator = this.createMaxConnectTimeGenerator();
+      this.connectionParams = this.getConnectionParams(connectionParams);
+
+      if (!this.lazy) {
+        this.connect();
+      }
+    }
+
+    get status() {
+      if (this.client === null) {
+        return this.wsImpl.CLOSED;
+      }
+
+      return this.client.readyState;
+    }
+
+    close(isForced = true, closedByUser = true) {
+      this.clearInactivityTimeout();
+
+      if (this.client !== null) {
+        this.closedByUser = closedByUser;
+
+        if (isForced) {
+          this.clearCheckConnectionInterval();
+          this.clearMaxConnectTimeout();
+          this.clearTryReconnectTimeout();
+          this.unsubscribeAll();
+          this.sendMessage(undefined, 'connection_terminate', null);
+        }
+
+        this.client.close();
+        this.client = null;
+        this.eventEmitter.emit('disconnected');
+
+        if (!isForced) {
+          this.tryReconnect();
+        }
+      }
+    }
+
+    request(request) {
+      const getObserver = this.getObserver.bind(this);
+      const executeOperation = this.executeOperation.bind(this);
+      const unsubscribe = this.unsubscribe.bind(this);
+      let opId;
+      this.clearInactivityTimeout();
+      return {
+        [result.default ? result.default : result]() {
+          return this;
+        },
+
+        subscribe(observerOrNext, onError, onComplete) {
+          const observer = getObserver(observerOrNext, onError, onComplete);
+          opId = executeOperation(request, (error, result) => {
+            if (error === null && result === null) {
+              if (observer.complete) {
+                observer.complete();
+              }
+            } else if (error) {
+              if (observer.error) {
+                observer.error(error[0]);
+              }
+            } else {
+              if (observer.next) {
+                observer.next(result);
+              }
+            }
+          });
+          return {
+            unsubscribe: () => {
+              if (opId) {
+                unsubscribe(opId);
+                opId = null;
+              }
+            }
+          };
+        }
+
+      };
+    }
+
+    on(eventName, callback, context) {
+      const handler = this.eventEmitter.on(eventName, callback, context);
+      return () => {
+        handler.off(eventName, callback, context);
+      };
+    }
+
+    onConnected(callback, context) {
+      return this.on('connected', callback, context);
+    }
+
+    onConnecting(callback, context) {
+      return this.on('connecting', callback, context);
+    }
+
+    onDisconnected(callback, context) {
+      return this.on('disconnected', callback, context);
+    }
+
+    onReconnected(callback, context) {
+      return this.on('reconnected', callback, context);
+    }
+
+    onReconnecting(callback, context) {
+      return this.on('reconnecting', callback, context);
+    }
+
+    onError(callback, context) {
+      return this.on('error', callback, context);
+    }
+
+    unsubscribeAll() {
+      Object.keys(this.operations).forEach(subId => {
+        this.unsubscribe(subId);
+      });
+    }
+
+    getConnectionParams(connectionParams) {
+      return () => new Promise((resolve, reject) => {
+        if (typeof connectionParams === 'function') {
+          try {
+            return resolve(connectionParams(null));
+          } catch (error) {
+            return reject(error);
+          }
+        }
+
+        resolve(connectionParams);
+      });
+    }
+
+    executeOperation(options, handler) {
+      if (this.client === null) {
+        this.connect();
+      }
+
+      const opId = this.generateOperationId();
+      this.operations[opId] = {
+        options: options,
+        handler
+      };
+
+      try {
+        this.checkOperationOptions(options, handler);
+
+        if (this.operations[opId]) {
+          this.operations[opId] = {
+            options,
+            handler
+          };
+          this.sendMessage(opId, 'start', options);
+        }
+      } catch (error) {
+        this.unsubscribe(opId);
+        handler(this.formatErrors(error));
+      }
+
+      return opId;
+    }
+
+    getObserver(observerOrNext, error, complete) {
+      if (typeof observerOrNext === 'function') {
+        return {
+          next: v => observerOrNext(v),
+          error: e => error && error(e),
+          complete: () => complete && complete()
+        };
+      }
+
+      return observerOrNext;
+    }
+
+    createMaxConnectTimeGenerator() {
+      const minValue = 1000;
+      const maxValue = this.wsTimeout;
+      return new backo({
+        min: minValue,
+        max: maxValue,
+        factor: 1.2
+      });
+    }
+
+    clearCheckConnectionInterval() {
+      if (this.checkConnectionIntervalId) {
+        clearInterval(this.checkConnectionIntervalId);
+        this.checkConnectionIntervalId = null;
+      }
+    }
+
+    clearMaxConnectTimeout() {
+      if (this.maxConnectTimeoutId) {
+        clearTimeout(this.maxConnectTimeoutId);
+        this.maxConnectTimeoutId = null;
+      }
+    }
+
+    clearTryReconnectTimeout() {
+      if (this.tryReconnectTimeoutId) {
+        clearTimeout(this.tryReconnectTimeoutId);
+        this.tryReconnectTimeoutId = null;
+      }
+    }
+
+    clearInactivityTimeout() {
+      if (this.inactivityTimeoutId) {
+        clearTimeout(this.inactivityTimeoutId);
+        this.inactivityTimeoutId = null;
+      }
+    }
+
+    setInactivityTimeout() {
+      if (this.inactivityTimeout > 0 && Object.keys(this.operations).length === 0) {
+        this.inactivityTimeoutId = setTimeout(() => {
+          if (Object.keys(this.operations).length === 0) {
+            this.close();
+          }
+        }, this.inactivityTimeout);
+      }
+    }
+
+    checkOperationOptions(options, handler) {
+      const {
+        query,
+        variables,
+        operationName
+      } = options;
+
+      if (!query) {
+        throw new Error('Must provide a query.');
+      }
+
+      if (!handler) {
+        throw new Error('Must provide an handler.');
+      }
+
+      if (!isString(query) || operationName && !isString(operationName) || variables && !isObject(variables)) {
+        throw new Error('Incorrect option types. query must be a string,' + '`operationName` must be a string, and `variables` must be an object.');
+      }
+    }
+
+    buildMessage(id, type, payload) {
+      const payloadToReturn = payload && payload.query ? _extends({}, payload, {
+        query: payload.query
+      }) : payload;
+      return {
+        id,
+        type,
+        payload: payloadToReturn
+      };
+    }
+
+    formatErrors(errors) {
+      if (Array.isArray(errors)) {
+        return errors;
+      }
+
+      if (errors && errors.errors) {
+        return this.formatErrors(errors.errors);
+      }
+
+      if (errors && errors.message) {
+        return [errors];
+      }
+
+      return [{
+        name: 'FormatedError',
+        message: 'Unknown error',
+        originalError: errors
+      }];
+    }
+
+    sendMessage(id, type, payload) {
+      this.sendMessageRaw(this.buildMessage(id, type, payload));
+    }
+
+    sendMessageRaw(message) {
+      switch (this.status) {
+        case this.wsImpl.OPEN:
+          const serializedMessage = JSON.stringify(message);
+
+          try {
+            JSON.parse(serializedMessage);
+          } catch (error) {
+            this.eventEmitter.emit('error', new Error("Message must be JSON-serializable. Got: ".concat(message)));
+          }
+
+          this.client.send(serializedMessage);
+          break;
+
+        case this.wsImpl.CONNECTING:
+          this.unsentMessagesQueue.push(message);
+          break;
+
+        default:
+          if (!this.reconnecting) {
+            this.eventEmitter.emit('error', new Error('A message was not sent because socket is not connected, is closing or ' + 'is already closed. Message was: ' + JSON.stringify(message)));
+          }
+
+      }
+    }
+
+    generateOperationId() {
+      return String(++this.nextOperationId);
+    }
+
+    tryReconnect() {
+      if (!this.reconnect || this.backoff.attempts >= this.reconnectionAttempts) {
+        return;
+      }
+
+      if (!this.reconnecting) {
+        Object.keys(this.operations).forEach(key => {
+          this.unsentMessagesQueue.push(this.buildMessage(key, 'start', this.operations[key].options));
+        });
+        this.reconnecting = true;
+      }
+
+      this.clearTryReconnectTimeout();
+      const delay = this.backoff.duration();
+      this.tryReconnectTimeoutId = setTimeout(() => {
+        this.connect();
+      }, delay);
+    }
+
+    flushUnsentMessagesQueue() {
+      this.unsentMessagesQueue.forEach(message => {
+        this.sendMessageRaw(message);
+      });
+      this.unsentMessagesQueue = [];
+    }
+
+    checkConnection() {
+      if (this.wasKeepAliveReceived) {
+        this.wasKeepAliveReceived = false;
+        return;
+      }
+
+      if (!this.reconnecting) {
+        this.close(false, true);
+      }
+    }
+
+    checkMaxConnectTimeout() {
+      this.clearMaxConnectTimeout();
+      this.maxConnectTimeoutId = setTimeout(() => {
+        if (this.status !== this.wsImpl.OPEN) {
+          this.reconnecting = true;
+          this.close(false, true);
+        }
+      }, this.maxConnectTimeGenerator.duration());
+    }
+
+    connect() {
+      this.client = new WebSocket(this.url, 'graphql-ws');
+      this.checkMaxConnectTimeout();
+      this.client.addEventListener('open', async () => {
+        if (this.status === this.wsImpl.OPEN) {
+          this.clearMaxConnectTimeout();
+          this.closedByUser = false;
+          this.eventEmitter.emit(this.reconnecting ? 'reconnecting' : 'connecting');
+
+          try {
+            const connectionParams = await this.connectionParams();
+            this.sendMessage(undefined, 'connection_init', connectionParams);
+            this.flushUnsentMessagesQueue();
+          } catch (error) {
+            this.sendMessage(undefined, 'connection_error', error);
+            this.flushUnsentMessagesQueue();
+          }
+        }
+      });
+
+      this.client.onclose = () => {
+        if (!this.closedByUser) {
+          this.close(false, false);
+        }
+      };
+
+      this.client.addEventListener('error', error => {
+        this.eventEmitter.emit('error', error);
+      });
+      this.client.addEventListener('message', ({
+        data
+      }) => {
+        this.processReceivedData(data);
+      });
+    }
+
+    processReceivedData(receivedData) {
+      let parsedMessage;
+      let opId;
+
+      try {
+        parsedMessage = JSON.parse(receivedData);
+        opId = parsedMessage.id;
+      } catch (error) {
+        throw new Error("Message must be JSON-parseable. Got: ".concat(receivedData));
+      }
+
+      if (['data', 'complete', 'error'].includes(parsedMessage.type) && !this.operations[opId]) {
+        this.unsubscribe(opId);
+        return;
+      }
+
+      switch (parsedMessage.type) {
+        case 'connection_error':
+          if (this.connectionCallback) {
+            this.connectionCallback(parsedMessage.payload);
+          }
+
+          break;
+
+        case 'connection_ack':
+          this.eventEmitter.emit(this.reconnecting ? 'reconnected' : 'connected');
+          this.reconnecting = false;
+          this.backoff.reset();
+          this.maxConnectTimeGenerator.reset();
+
+          if (this.connectionCallback) {
+            this.connectionCallback();
+          }
+
+          break;
+
+        case 'complete':
+          this.operations[opId].handler(null, null);
+          delete this.operations[opId];
+          break;
+
+        case 'error':
+          this.operations[opId].handler(this.formatErrors(parsedMessage.payload), null);
+          delete this.operations[opId];
+          break;
+
+        case 'data':
+          const parsedPayload = !parsedMessage.payload.errors ? parsedMessage.payload : { ...parsedMessage.payload,
+            errors: this.formatErrors(parsedMessage.payload.errors)
+          };
+          this.operations[opId].handler(null, parsedPayload);
+          break;
+
+        case 'ka':
+          const firstKA = typeof this.wasKeepAliveReceived === 'undefined';
+          this.wasKeepAliveReceived = true;
+
+          if (firstKA) {
+            this.checkConnection();
+          }
+
+          if (this.checkConnectionIntervalId) {
+            clearInterval(this.checkConnectionIntervalId);
+            this.checkConnection();
+          }
+
+          this.checkConnectionIntervalId = setInterval(this.checkConnection.bind(this), this.wsTimeout);
+          break;
+
+        default:
+          throw new Error('Invalid message type!');
+      }
+    }
+
+    unsubscribe(opId) {
+      if (this.operations[opId]) {
+        delete this.operations[opId];
+        this.setInactivityTimeout();
+        this.sendMessage(opId, 'stop', undefined);
+      }
+    }
+
+  }
+  function SubscribeQL(url, options) {
+    return new SubscriptionClient(url, options);
+  }
+
+  function noop() {}
+
+  function safe_not_equal(a, b) {
+    return a != a ? b == b : a !== b || a && typeof a === 'object' || typeof a === 'function';
+  }
+
+  const subscriber_queue = [];
+
+  function writable(value, start = noop) {
+    let stop;
+    const subscribers = [];
+
+    function set(new_value) {
+      if (safe_not_equal(value, new_value)) {
+        value = new_value;
+
+        if (stop) {
+          const run_queue = !subscriber_queue.length;
+
+          for (let i = 0; i < subscribers.length; i += 1) {
+            const s = subscribers[i];
+            s[1]();
+            subscriber_queue.push(s, value);
+          }
+
+          if (run_queue) {
+            for (let i = 0; i < subscriber_queue.length; i += 2) {
+              subscriber_queue[i][0](subscriber_queue[i + 1]);
+            }
+
+            subscriber_queue.length = 0;
+          }
+        }
+      }
+    }
+
+    function update(fn) {
+      set(fn(value));
+    }
+
+    function subscribe(run, invalidate = noop) {
+      const subscriber = [run, invalidate];
+      subscribers.push(subscriber);
+
+      if (subscribers.length === 1) {
+        stop = start(set) || noop;
+      }
+
+      run(value);
+      return () => {
+        const index = subscribers.indexOf(subscriber);
+
+        if (index !== -1) {
+          subscribers.splice(index, 1);
+        }
+
+        if (subscribers.length === 0) {
+          stop();
+          stop = null;
+        }
+      };
+    }
+
+    return {
+      set,
+      update,
+      subscribe
+    };
+  }
+
+  const graphql = new GraphQL();
+
+  function cacheWritable(initial, key) {
+    const {
+      subscribe,
+      set
+    } = writable(initial);
+    return {
+      subscribe,
+      set: (callback = data => data) => {
+        set(graphql.cache[key] = callback(graphql.cache[key]));
+      }
+    };
+  }
+
+  function getOrSet(fetchOptionsOverride, data, withCache = true, getKey = key => key) {
+    const fetchOptions = graphqlFetchOptions({ ...data
+    });
+    fetchOptionsOverride(fetchOptions);
+    const has = hashObject(fetchOptions);
+    getKey(has);
+
+    if (graphql.cache[has] && graphql.cache[has].graphQLErrors) {
+      delete graphql.cache[has];
+    }
+
+    if (graphql.cache[has] && withCache) {
+      return new Promise(res => res(graphql.cache[has]));
+    }
+
+    const pending = graphql.operate({
+      fetchOptionsOverride,
+      operation: { ...data
+      }
+    });
+    return pending.cacheValuePromise;
+  }
+
+  let get = (fetchOptionsOverride, data, withCache = true) => {
+    return getOrSet(fetchOptionsOverride, data, withCache);
+  };
+
+  let query = (fetchOptionsOverride, data, withCache = true) => {
+    let key = '';
+    let resolver;
+    const initial = new Promise(res => resolver = res);
+    getOrSet(fetchOptionsOverride, data, withCache, _key => key = _key).then(result => {
+      dt.set(() => graphql.cache[key]);
+      resolver(Promise.resolve(graphql.cache[key]));
+    });
+    const dt = cacheWritable(initial, key);
+    return dt;
+  };
+
+  const initSub = (ws, headers) => new SubscribeQL(ws.url, {
+    reconnect: ws.reconnect || true,
+    lazy: ws.lazy || true,
+    ...(ws.connectionParams ? {
+      connectionParams: ws.connectionParams
+    } : {
+      connectionParams: () => {
+        return {
+          headers: { ...headers()
+          }
+        };
+      }
+    })
+  });
+
+  function restore(fetchOptionsOverride, data, cache) {
+    if (data) {
+      const fetchOptions = graphqlFetchOptions({ ...data
+      });
+      fetchOptionsOverride(fetchOptions);
+      const has = hashObject(fetchOptions);
+
+      if (graphql.cache[has]) {
+        graphql.cache[has] = cache;
+      }
+
+      return graphql.cache[has];
+    }
+  }
+
+  const subscribe = (sub, query) => {
+    return sub.request(query);
+  };
+
+  const client = options => {
+    let cl = {};
+    if (!options.headers) options.headers = {
+      "content-type": "application/json"
+    };
+
+    if (options.ws) {
+      let sub = initSub(options.ws, options.headers);
+      cl.subscription = sub;
+
+      cl.subscribe = data => subscribe(sub, data);
+    }
+
+    if (!options.url) {
+      throw new Error('graphql endpoint not set');
+    }
+
+    const fetchOptionsOverride = _options => {
+      _options.url = options.url, _options.headers = options.headers();
+    };
+
+    cl.get = (data, cache) => get(fetchOptionsOverride, data, cache);
+
+    cl.restore = (data, cache) => restore(fetchOptionsOverride, data, cache);
+
+    cl.query = (data, cache) => query(fetchOptionsOverride, data, cache);
+
+    cl.mutate = (data, cache = false) => get(fetchOptionsOverride, data, cache);
+
+    cl = _extends(cl, graphql);
+    return { ...cl
+    };
+  };
+
+  exports.GraphQL = GraphQL;
+  exports.GraphQLSvelte = client;
+  exports.SubscribeQL = SubscribeQL;
+  exports.graphqlFetchOptions = graphqlFetchOptions;
+  exports.hashObject = hashObject;
+  exports.reportCacheErrors = reportCacheErrors;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
 //# sourceMappingURL=graphql-svelte.js.map

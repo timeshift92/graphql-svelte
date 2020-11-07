@@ -8,7 +8,7 @@ export default {
   input: 'src/index.js',
   output: [{
     sourcemap: true,
-    format: 'iife',
+    format: 'umd',
     name: 'app',
     file: 'dist/graphql-svelte.js' ,
   },{
@@ -56,7 +56,7 @@ export default {
         ["@babel/plugin-transform-object-assign"],
         ["@babel/plugin-transform-runtime",{
           "absoluteRuntime": false,
-          // "corejs": false,
+          "corejs": false,
           "helpers": true,
           "regenerator": true,
           "useESModules": true,
@@ -66,8 +66,8 @@ export default {
     }),
     commonjs(),
 
-    terser(),
-    gzipPlugin(),
+    // terser(),
+    // gzipPlugin(),
   ],
 
 }
