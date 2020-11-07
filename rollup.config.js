@@ -66,8 +66,8 @@ export default {
     }),
     commonjs(),
 
-    // terser(),
-    // gzipPlugin(),
+    terser(),
+    gzipPlugin(),
   ],
 
 }
