@@ -5,7 +5,7 @@ import { SubscribeQL } from './SubscribeQL'
 
 export let client
 let _headers = {
-  'content-type': 'application/json'
+  'content-type': 'application/json',
 }
 
 export function setHeaders(headers) {
@@ -16,10 +16,24 @@ export function headers() {
   return _headers
 }
 
-export function getClient(url, wsUrl) {
-  const graphql = new GraphQL({ fetcher: fetch })
+/**
+ *
+ * @param {*} url
+ * @param {*} wsUrl
+ * @param {{
+ *   connectionCallback:string
+ *   connectionParams:Object,
+ *   timeout:number,
+ *   reconnect:boolean,
+ *   reconnectionAttempts:number,
+ *   lazy:boolean,
+ *   inactivityTimeout:number
+ *   }} options
+ */
+export function getClient(url, wsUrl, wsOptions = {}) {
+  const graphql = new GraphQL()
 
-  const fetchOptionsOverride = _options => {
+  const fetchOptionsOverride = (_options) => {
     ;(_options.url = url), (_options.headers = headers())
   }
 
@@ -27,7 +41,7 @@ export function getClient(url, wsUrl) {
     fetchOptionsOverride,
     data,
     withCache = true,
-    getKey = key => key
+    getKey = (key) => key
   ) {
     const fetchOptions = graphqlFetchOptions({ ...data })
 
@@ -40,23 +54,23 @@ export function getClient(url, wsUrl) {
     }
 
     if (graphql.cache[has] && withCache) {
-      return new Promise(res => res(graphql.cache[has]))
+      return new Promise((res) => res(graphql.cache[has]))
     }
 
     const pending = graphql.operate({
       fetchOptionsOverride,
       operation: {
-        ...data
-      }
+        ...data,
+      },
     })
 
-    return pending.cacheValuePromise.then(r => graphql.cache[has])
+    return pending.cacheValuePromise.then((r) => graphql.cache[has])
   }
-
+  let client = {}
   client = Object.assign(client, graphql)
 
   if (wsUrl) {
-    const initSub = ws =>
+    const initSub = (ws) =>
       SubscribeQL(wsUrl, {
         reconnect: ws.reconnect || true,
         lazy: ws.lazy || true,
@@ -65,35 +79,21 @@ export function getClient(url, wsUrl) {
           : {
               connectionParams: () => {
                 return headers()
-              }
-            })
+              },
+            }),
       })
-    let sub = initSub(wsUrl)
-    client.subscription = sub
-    /**
-     * @param {string|'error'} event
-     * @param {Function} callback
-     */
-    client.subscriptionEvents = sub.on
-    /**
-     *
-     * @param {SubscriptionClient} sub
-     * @param { {query:string, variables:Object} } query
-     */
-    const subscribe = (sub, query) => {
-      return sub.request(query)
-    }
+    let sub = initSub(wsOptions)
 
     /**
      *
-     * @param { {query:string, variables:Object} } query
+     * @param { query:string, variables:Object } client.subscription
      */
-    client.subscription = data => subscribe(sub, data)
+    client.subscription = (query, variables) =>
+      sub.request({ query, variables })
     /**
-     * @param {string|'error'} event
-     * @param {Function} callback
+     * @param {SubscribeQL} client.sub
      */
-    client.subscriptionEvents = sub.on
+    client.sub = sub
   }
   /**
    *

@@ -9,7 +9,7 @@
     mutate: client.mutate,
     subscription: client.subscription,
     client,
-    hasura
+    hasura,
   })
 </script>
 

@@ -8,13 +8,13 @@ import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp.js'
 import { promisifyEvent } from './helpers/promisifyEvent'
 import { startServer } from './helpers/startServer'
 
-t.test('GraphQL.cache population via `cache` constructor option', t => {
+t.test('GraphQL.cache population via `cache` constructor option', (t) => {
   const cache = {
     abcdefg: {
       data: {
-        echo: 'hello'
-      }
-    }
+        echo: 'hello',
+      },
+    },
   }
 
   const graphql = new GraphQL({ cache })
@@ -25,7 +25,7 @@ t.test('GraphQL.cache population via `cache` constructor option', t => {
   t.end()
 })
 
-t.test('GraphQL.operate()', async t => {
+t.test('GraphQL.operate()', async (t) => {
   /**
    * Tests [`GraphQL.operate()`]{@link GraphQL#query} under certain conditions.
    * @param {object} options Options.
@@ -48,14 +48,14 @@ t.test('GraphQL.operate()', async t => {
     graphql = new GraphQL({
       cache: {
         // Spread so that cache updates don’t mutate the original object.
-        ...initialGraphQLCache
+        ...initialGraphQLCache,
       },
-      cacheWrapper: cache => cache
+      cacheWrapper: (cache) => cache,
     }),
     expectedResolvedCacheValue,
     expectedResponseType = Response,
-    callback
-  }) => async t => {
+    callback,
+  }) => async (t) => {
     const fetchEvent = promisifyEvent(graphql, 'fetch')
     const cacheEvent = promisifyEvent(graphql, 'cache')
     if (resetOnLoad) var resetEvent = promisifyEvent(graphql, 'reset')
@@ -67,7 +67,7 @@ t.test('GraphQL.operate()', async t => {
       },
       operation,
       resetOnLoad,
-      reloadOnLoad
+      reloadOnLoad,
     })
     t.type(cacheKey, 'string', 'cacheKey')
     t.equal(graphql.cache[cacheKey], cacheValue)
@@ -163,7 +163,7 @@ t.test('GraphQL.operate()', async t => {
         // last query. Otherwise, the new cache value should be merged into the
         // initial GraphQL cache.
         ...(resetOnLoad ? {} : initialGraphQLCache),
-        [cacheKey]: expectedResolvedCacheValue
+        [cacheKey]: expectedResolvedCacheValue,
       },
       'GraphQL cache'
     )
@@ -171,7 +171,7 @@ t.test('GraphQL.operate()', async t => {
     if (callback) callback({ cacheKey })
   }
 
-  await t.test('Without and with initial cache', async t => {
+  await t.test('Without and with initial cache', async (t) => {
     const port = await startServer(t, createGraphQLKoaApp())
     const expectedResolvedCacheValue = { data: { echo: 'hello' } }
 
@@ -184,7 +184,7 @@ t.test('GraphQL.operate()', async t => {
         expectedResolvedCacheValue,
         callback({ cacheKey }) {
           hash = cacheKey
-        }
+        },
       })
     )
 
@@ -193,14 +193,14 @@ t.test('GraphQL.operate()', async t => {
       testQuery({
         port,
         initialGraphQLCache: {
-          [hash]: expectedResolvedCacheValue
+          [hash]: expectedResolvedCacheValue,
         },
-        expectedResolvedCacheValue
+        expectedResolvedCacheValue,
       })
     )
   })
 
-  await t.test('With global fetch unavailable', async t => {
+  await t.test('With global fetch unavailable', async (t) => {
     const port = await startServer(t, createGraphQLKoaApp())
 
     // Store the global fetch polyfill.
@@ -214,9 +214,9 @@ t.test('GraphQL.operate()', async t => {
       testQuery({
         port,
         expectedResolvedCacheValue: {
-          fetchError: 'Global fetch API or polyfill unavailable.'
+          fetchError: 'Global fetch API or polyfill unavailable.',
         },
-        expectedResponseType: 'undefined'
+        expectedResponseType: 'undefined',
       })
     )
 
@@ -224,7 +224,7 @@ t.test('GraphQL.operate()', async t => {
     global.fetch = fetch
   })
 
-  await t.test('With HTTP and parse errors', async t => {
+  await t.test('With HTTP and parse errors', async (t) => {
     const port = await startServer(
       t,
       new Koa().use(async (ctx, next) => {
@@ -242,15 +242,15 @@ t.test('GraphQL.operate()', async t => {
         expectedResolvedCacheValue: {
           httpError: {
             status: 404,
-            statusText: 'Not Found'
+            statusText: 'Not Found',
           },
-          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`
-        }
+          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`,
+        },
       })
     )
   })
 
-  await t.test('With parse error', async t => {
+  await t.test('With parse error', async (t) => {
     const port = await startServer(
       t,
       new Koa().use(async (ctx, next) => {
@@ -266,13 +266,13 @@ t.test('GraphQL.operate()', async t => {
       testQuery({
         port,
         expectedResolvedCacheValue: {
-          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`
-        }
+          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`,
+        },
       })
     )
   })
 
-  await t.test('With malformed response payload', async t => {
+  await t.test('With malformed response payload', async (t) => {
     const port = await startServer(
       t,
       new Koa().use(async (ctx, next) => {
@@ -288,13 +288,13 @@ t.test('GraphQL.operate()', async t => {
       testQuery({
         port,
         expectedResolvedCacheValue: {
-          parseError: 'Malformed payload.'
-        }
+          parseError: 'Malformed payload.',
+        },
       })
     )
   })
 
-  await t.test('With HTTP and GraphQL errors', async t => {
+  await t.test('With HTTP and GraphQL errors', async (t) => {
     const port = await startServer(t, createGraphQLKoaApp())
     await t.test(
       'Run query',
@@ -304,7 +304,7 @@ t.test('GraphQL.operate()', async t => {
         expectedResolvedCacheValue: {
           httpError: {
             status: 400,
-            statusText: 'Bad Request'
+            statusText: 'Bad Request',
           },
           graphQLErrors: [
             {
@@ -312,31 +312,31 @@ t.test('GraphQL.operate()', async t => {
               locations: [
                 {
                   line: 1,
-                  column: 3
-                }
-              ]
-            }
-          ]
-        }
+                  column: 3,
+                },
+              ],
+            },
+          ],
+        },
       })
     )
   })
 
-  await t.test('With `resetOnLoad` option', async t => {
+  await t.test('With `resetOnLoad` option', async (t) => {
     const port = await startServer(t, createGraphQLKoaApp())
 
     const initialGraphQLCache = {
       abcdefg: {
         data: {
-          b: true
-        }
-      }
+          b: true,
+        },
+      },
     }
 
     const expectedResolvedCacheValue = {
       data: {
-        echo: 'hello'
-      }
+        echo: 'hello',
+      },
     }
 
     await t.test(
@@ -344,7 +344,7 @@ t.test('GraphQL.operate()', async t => {
       testQuery({
         port,
         initialGraphQLCache,
-        expectedResolvedCacheValue
+        expectedResolvedCacheValue,
       })
     )
 
@@ -354,26 +354,26 @@ t.test('GraphQL.operate()', async t => {
         port,
         resetOnLoad: true,
         initialGraphQLCache,
-        expectedResolvedCacheValue
+        expectedResolvedCacheValue,
       })
     )
   })
 
-  await t.test('With `reloadOnLoad` option', async t => {
+  await t.test('With `reloadOnLoad` option', async (t) => {
     const port = await startServer(t, createGraphQLKoaApp())
 
     const initialGraphQLCache = {
       abcdefg: {
         data: {
-          b: true
-        }
-      }
+          b: true,
+        },
+      },
     }
 
     const expectedResolvedCacheValue = {
       data: {
-        echo: 'hello'
-      }
+        echo: 'hello',
+      },
     }
 
     await t.test(
@@ -381,7 +381,7 @@ t.test('GraphQL.operate()', async t => {
       testQuery({
         port,
         initialGraphQLCache,
-        expectedResolvedCacheValue
+        expectedResolvedCacheValue,
       })
     )
 
@@ -391,42 +391,45 @@ t.test('GraphQL.operate()', async t => {
         port,
         reloadOnLoad: true,
         initialGraphQLCache,
-        expectedResolvedCacheValue
+        expectedResolvedCacheValue,
       })
     )
   })
 
-  await t.test('With both `reloadOnLoad` and `resetOnLoad` options true', t => {
-    const graphql = new GraphQL({
-      fetcher: nodeFetch
-    })
-
-    t.throws(() => {
-      graphql.operate({
-        operation: { query: '' },
-        reloadOnLoad: true,
-        resetOnLoad: true
+  await t.test(
+    'With both `reloadOnLoad` and `resetOnLoad` options true',
+    (t) => {
+      const graphql = new GraphQL({
+        fetcher: nodeFetch,
       })
-    }, new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'))
 
-    t.end()
-  })
+      t.throws(() => {
+        graphql.operate({
+          operation: { query: '' },
+          reloadOnLoad: true,
+          resetOnLoad: true,
+        })
+      }, new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'))
+
+      t.end()
+    }
+  )
 })
 
-t.test('Concurrent identical queries share a request', async t => {
+t.test('Concurrent identical queries share a request', async (t) => {
   let requestCount = 0
   const port = await startServer(
     t,
     createGraphQLKoaApp({
       requestCount: {
         type: GraphQLInt,
-        resolve: () => ++requestCount
-      }
+        resolve: () => ++requestCount,
+      },
     })
   )
 
   const graphql = new GraphQL({
-    fetcher: nodeFetch
+    fetcher: nodeFetch,
   })
 
   const queryOptions = {
@@ -434,17 +437,17 @@ t.test('Concurrent identical queries share a request', async t => {
       options.url = `http://localhost:${port}`
     },
     operation: {
-      query: '{ requestCount }'
-    }
+      query: '{ requestCount }',
+    },
   }
 
   const {
     cacheKey: cacheKey1,
-    cacheValuePromise: cacheValuePromise1
+    cacheValuePromise: cacheValuePromise1,
   } = graphql.operate(queryOptions)
   const {
     cacheKey: cacheKey2,
-    cacheValuePromise: cacheValuePromise2
+    cacheValuePromise: cacheValuePromise2,
   } = graphql.operate(queryOptions)
 
   // To be sure no mistake was made in the test.
@@ -467,10 +470,10 @@ t.test('Concurrent identical queries share a request', async t => {
   await Promise.all([cacheValuePromise1, cacheValuePromise2])
 })
 
-t.test('GraphQL.reload()', async t => {
-  await t.test('With `exceptCacheKey` parameter', async t => {
+t.test('GraphQL.reload()', async (t) => {
+  await t.test('With `exceptCacheKey` parameter', async (t) => {
     const graphql = new GraphQL({
-      fetcher: nodeFetch
+      fetcher: nodeFetch,
     })
     const exceptCacheKey = 'abcdefg'
     const reloadEvent = promisifyEvent(graphql, 'reload')
@@ -485,7 +488,7 @@ t.test('GraphQL.reload()', async t => {
     )
   })
 
-  await t.test('Without `exceptCacheKey` parameter', async t => {
+  await t.test('Without `exceptCacheKey` parameter', async (t) => {
     const graphql = new GraphQL({ fetcher: nodeFetch })
     const reloadEvent = promisifyEvent(graphql, 'reload')
 
@@ -500,17 +503,17 @@ t.test('GraphQL.reload()', async t => {
   })
 })
 
-t.test('GraphQL.reset()', async t => {
-  await t.test('Without `exceptCacheKey` parameter', async t => {
+t.test('GraphQL.reset()', async (t) => {
+  await t.test('Without `exceptCacheKey` parameter', async (t) => {
     const graphql = new GraphQL({
       fetcher: nodeFetch,
       cache: {
         abcdefg: {
           data: {
-            echo: 'hello'
-          }
-        }
-      }
+            echo: 'hello',
+          },
+        },
+      },
     })
 
     const resetEvent = promisifyEvent(graphql, 'reset')
@@ -527,29 +530,29 @@ t.test('GraphQL.reset()', async t => {
     t.deepEquals(graphql.cache, {}, 'GraphQL.cache')
   })
 
-  await t.test('With `exceptCacheKey` parameter', async t => {
+  await t.test('With `exceptCacheKey` parameter', async (t) => {
     const cache1 = {
       abcdefg: {
         data: {
-          echo: 'hello'
-        }
-      }
+          echo: 'hello',
+        },
+      },
     }
 
     const cache2 = {
       ghijkl: {
         data: {
-          echo: 'hello'
-        }
-      }
+          echo: 'hello',
+        },
+      },
     }
 
     const graphql = new GraphQL({
       fetcher: nodeFetch,
       cache: {
         ...cache1,
-        ...cache2
-      }
+        ...cache2,
+      },
     })
 
     const exceptCacheKey = 'abcdefg'

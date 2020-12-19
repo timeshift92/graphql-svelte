@@ -9,7 +9,7 @@ export function graphqlFetchOptions(operation) {
   const fetchOptions = {
     url: '/graphql',
     method: 'POST',
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json' },
   }
 
   fetchOptions.headers['Content-Type'] = 'application/json'

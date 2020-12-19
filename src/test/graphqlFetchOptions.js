@@ -6,8 +6,8 @@ import { graphqlFetchOptions } from '../graphqlFetchOptions'
 // Global FormData polyfill.
 global.FormData = FormData
 
-t.test('graphqlFetchOptions', async t => {
-  await t.test('Without files', t => {
+t.test('graphqlFetchOptions', async (t) => {
+  await t.test('Without files', (t) => {
     t.deepEquals(
       graphqlFetchOptions({ query: '' }),
       {
@@ -15,9 +15,9 @@ t.test('graphqlFetchOptions', async t => {
         method: 'POST',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: '{"query":""}'
+        body: '{"query":""}',
       },
       'Fetch options'
     )

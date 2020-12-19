@@ -37,7 +37,7 @@ export class SubscriptionClient {
       reconnect = false,
       reconnectionAttempts = Infinity,
       lazy = false,
-      inactivityTimeout = 0
+      inactivityTimeout = 0,
     } = options || {}
 
     this.wsImpl = WebSocket
@@ -103,24 +103,24 @@ export class SubscriptionClient {
     let opId
 
     this.clearInactivityTimeout()
-
     return {
       [$$observable.default ? $$observable.default : $$observable]() {
         return this
       },
       subscribe(observerOrNext, onError, onComplete) {
         const observer = getObserver(observerOrNext, onError, onComplete)
+
         opId = executeOperation(request, (error, result) => {
           if (error === null && result === null) {
-            if (observer.complete) {
+            if (observer && observer.complete) {
               observer.complete()
             }
           } else if (error) {
-            if (observer.error) {
+            if (observer && observer.error) {
               observer.error(error[0])
             }
           } else {
-            if (observer.next) {
+            if (observer && observer.next) {
               observer.next(result)
             }
           }
@@ -132,9 +132,9 @@ export class SubscriptionClient {
               unsubscribe(opId)
               opId = null
             }
-          }
+          },
         }
-      }
+      },
     }
   }
 
@@ -170,7 +170,7 @@ export class SubscriptionClient {
   }
 
   unsubscribeAll() {
-    Object.keys(this.operations).forEach(subId => {
+    Object.keys(this.operations).forEach((subId) => {
       this.unsubscribe(subId)
     })
   }
@@ -215,9 +215,12 @@ export class SubscriptionClient {
   getObserver(observerOrNext, error, complete) {
     if (typeof observerOrNext === 'function') {
       return {
-        next: v => observerOrNext(v),
-        error: e => error && error(e),
-        complete: () => complete && complete()
+        next: (v) => observerOrNext(v),
+        error: (e) => {
+          this.eventEmitter.on('error', error(e))
+          error && error(e)
+        },
+        complete: () => complete && complete(),
       }
     }
     return observerOrNext
@@ -229,7 +232,7 @@ export class SubscriptionClient {
     return new Backoff({
       min: minValue,
       max: maxValue,
-      factor: 1.2
+      factor: 1.2,
     })
   }
 
@@ -277,9 +280,11 @@ export class SubscriptionClient {
   checkOperationOptions(options, handler) {
     const { query, variables, operationName } = options
     if (!query) {
+      this.eventEmitter.emit('error', new Error('Must provide a query.'))
       throw new Error('Must provide a query.')
     }
     if (!handler) {
+      this.eventEmitter.emit('error', new Error('Must provide an handler.'))
       throw new Error('Must provide an handler.')
     }
     if (
@@ -287,9 +292,16 @@ export class SubscriptionClient {
       (operationName && !isString(operationName)) ||
       (variables && !isObject(variables))
     ) {
+      this.eventEmitter.emit(
+        'error',
+        new Error(
+          'Incorrect option types. query must be a string,' +
+          '`operationName` must be a string, and `variables` must be an object.'
+        )
+      )
       throw new Error(
         'Incorrect option types. query must be a string,' +
-          '`operationName` must be a string, and `variables` must be an object.'
+        '`operationName` must be a string, and `variables` must be an object.'
       )
     }
   }
@@ -298,17 +310,19 @@ export class SubscriptionClient {
     const payloadToReturn =
       payload && payload.query
         ? Object.assign({}, payload, {
-            query: payload.query
-          })
+          query: payload.query,
+        })
         : payload
     return {
       id,
       type,
-      payload: payloadToReturn
+      payload: payloadToReturn,
     }
   }
 
   formatErrors(errors) {
+    if (errors[0])
+      this.eventEmitter.emit('error', errors[0])
     if (Array.isArray(errors)) {
       return errors
     }
@@ -322,8 +336,8 @@ export class SubscriptionClient {
       {
         name: 'FormatedError',
         message: 'Unknown error',
-        originalError: errors
-      }
+        originalError: errors,
+      },
     ]
   }
 
@@ -355,8 +369,8 @@ export class SubscriptionClient {
             'error',
             new Error(
               'A message was not sent because socket is not connected, is closing or ' +
-                'is already closed. Message was: ' +
-                JSON.stringify(message)
+              'is already closed. Message was: ' +
+              JSON.stringify(message)
             )
           )
         }
@@ -373,7 +387,7 @@ export class SubscriptionClient {
     }
 
     if (!this.reconnecting) {
-      Object.keys(this.operations).forEach(key => {
+      Object.keys(this.operations).forEach((key) => {
         this.unsentMessagesQueue.push(
           this.buildMessage(key, 'start', this.operations[key].options)
         )
@@ -390,7 +404,7 @@ export class SubscriptionClient {
   }
 
   flushUnsentMessagesQueue() {
-    this.unsentMessagesQueue.forEach(message => {
+    this.unsentMessagesQueue.forEach((message) => {
       this.sendMessageRaw(message)
     })
     this.unsentMessagesQueue = []
@@ -452,7 +466,7 @@ export class SubscriptionClient {
       }
     }
 
-    this.client.addEventListener('error', error => {
+    this.client.addEventListener('error', (error) => {
       // Capture and ignore errors to prevent unhandled exceptions, wait for
       // onclose to fire before attempting a reconnect.
       this.eventEmitter.emit('error', error)
@@ -518,9 +532,9 @@ export class SubscriptionClient {
         const parsedPayload = !parsedMessage.payload.errors
           ? parsedMessage.payload
           : {
-              ...parsedMessage.payload,
-              errors: this.formatErrors(parsedMessage.payload.errors)
-            }
+            ...parsedMessage.payload,
+            errors: this.formatErrors(parsedMessage.payload.errors),
+          }
         this.operations[opId].handler(null, parsedPayload)
         break
 

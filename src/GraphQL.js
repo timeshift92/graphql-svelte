@@ -105,7 +105,7 @@ export class GraphQL {
    * graphql.reload()
    * ```
    */
-  reload = exceptCacheKey => {
+  reload = (exceptCacheKey) => {
     this.emit('reload', { exceptCacheKey })
   }
 
@@ -120,13 +120,13 @@ export class GraphQL {
    * graphql.reset()
    * ```
    */
-  reset = exceptCacheKey => {
+  reset = (exceptCacheKey) => {
     let cacheKeys = Object.keys(this.cache)
 
     if (exceptCacheKey)
-      cacheKeys = cacheKeys.filter(hash => hash !== exceptCacheKey)
+      cacheKeys = cacheKeys.filter((hash) => hash !== exceptCacheKey)
 
-    cacheKeys.forEach(cacheKey => delete this.cache[cacheKey])
+    cacheKeys.forEach((cacheKey) => delete this.cache[cacheKey])
 
     // Emit cache updates after the entire cache has been updated, so logic in
     // listeners can assume cache for all queries is fresh and stable.
@@ -153,13 +153,13 @@ export class GraphQL {
     const cacheValue = {}
     const cacheValuePromise = fetcher(url, options)
       .then(
-        response => {
+        (response) => {
           fetchResponse = response
 
           if (!response.ok)
             cacheValue.httpError = {
               status: response.status,
-              statusText: response.statusText
+              statusText: response.statusText,
             }
 
           return response.json().then(
@@ -194,7 +194,7 @@ export class GraphQL {
           cacheKey,
           cacheValue,
           // May be undefined if there was a fetch error.
-          response: fetchResponse
+          response: fetchResponse,
         })
 
         return cacheValue
@@ -226,7 +226,7 @@ export class GraphQL {
     operation,
     fetchOptionsOverride,
     reloadOnLoad,
-    resetOnLoad
+    resetOnLoad,
   }) => {
     if (reloadOnLoad && resetOnLoad)
       throw new Error(
@@ -253,7 +253,7 @@ export class GraphQL {
     return {
       cacheKey,
       cacheValue: this.cache[cacheKey],
-      cacheValuePromise
+      cacheValuePromise,
     }
   }
 }

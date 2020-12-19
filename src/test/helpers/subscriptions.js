@@ -22,7 +22,7 @@ const resolvers = {
   Query: {
     messages(root, {}, context) {
       return messages
-    }
+    },
   },
   Mutation: {
     addMessage(root, { message, broadcast }, context) {
@@ -31,17 +31,17 @@ const resolvers = {
       pubsub.publish('newMessage', {
         entry: entry,
         authToken: context.authToken,
-        broadcast
+        broadcast,
       })
       return messages
-    }
+    },
   },
   Subscription: {
     newMessage(message, variables, context, subscription) {
       console.log(`Serving subscription for user ${variables.userId}`)
       return message.entry
-    }
-  }
+    },
+  },
 }
 
 const destinationFilter = (options, { filter }, subscriptionName) => ({
@@ -55,20 +55,20 @@ const destinationFilter = (options, { filter }, subscriptionName) => ({
         return payload.entry
       }
       return null
-    }
-  }
+    },
+  },
 })
 
 const setupFunctions = {
   // The name of the subscription in our schema
-  newMessage: destinationFilter
+  newMessage: destinationFilter,
 }
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
-  setupFunctions
+  setupFunctions,
 })
 
 export { subscriptionManager, pubsub, schema, resolvers }

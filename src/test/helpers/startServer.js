@@ -8,7 +8,7 @@
  */
 export const startServer = (t, app) =>
   new Promise((resolve, reject) => {
-    app.listen(function(error) {
+    app.listen(function (error) {
       if (error) reject(error)
       else {
         t.tearDown(() => this.close())

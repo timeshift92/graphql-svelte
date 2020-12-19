@@ -5,7 +5,7 @@ import { hashObject } from '../hashObject'
 // Global FormData polyfill.
 global.FormData = FormData
 
-t.test('hashObject() with an object', t => {
+t.test('hashObject() with an object', (t) => {
   const object = { a: 1, b: 2 }
 
   const hash1 = hashObject(object)
@@ -25,7 +25,7 @@ t.test('hashObject() with an object', t => {
   t.end()
 })
 
-t.test('hashObject() with a FormData instance', t => {
+t.test('hashObject() with a FormData instance', (t) => {
   const form1 = new FormData()
   const form2 = new FormData()
 

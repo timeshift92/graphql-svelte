@@ -3,4 +3,4 @@
  * @param {number} ms Duration in milliseconds.
  * @returns {Promise<void>} Resolves once the duration is up.
  */
-export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
