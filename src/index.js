@@ -3,12 +3,9 @@ export { reportCacheErrors } from './reportCacheErrors'
 export { graphqlFetchOptions } from './graphqlFetchOptions'
 export { hashObject } from './hashObject'
 export { SubscribeQL } from './SubscribeQL'
-import * as svqlConfig from "./svqlConfig";
-import SvGraphQL from "./SvGraphQL.svelte";
-export {
-  SvGraphQL,
-  svqlConfig
-}
+import * as svqlConfig from './svqlConfig'
+import SvGraphQL from './SvGraphQL.svelte'
+export { SvGraphQL, svqlConfig }
 /**
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.
  * @kind typedef

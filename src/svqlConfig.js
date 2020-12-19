@@ -1,4 +1,3 @@
-
 import { GraphQL } from './GraphQL'
 import { graphqlFetchOptions } from './graphqlFetchOptions'
 import { hashObject } from './hashObject'
@@ -21,7 +20,7 @@ export function getClient(url, wsUrl) {
   const graphql = new GraphQL({ fetcher: fetch })
 
   const fetchOptionsOverride = _options => {
-    ; (_options.url = url), (_options.headers = headers())
+    ;(_options.url = url), (_options.headers = headers())
   }
 
   function getOrSet(
@@ -64,10 +63,10 @@ export function getClient(url, wsUrl) {
         ...(ws.connectionParams
           ? { connectionParams: ws.connectionParams }
           : {
-            connectionParams: () => {
-              return headers()
-            }
-          })
+              connectionParams: () => {
+                return headers()
+              }
+            })
       })
     let sub = initSub(wsUrl)
     client.subscription = sub

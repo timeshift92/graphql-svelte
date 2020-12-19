@@ -1237,10 +1237,10 @@ function create_fragment(ctx) {
   let current;
   const default_slot_template =
   /*#slots*/
-  ctx[5].default;
+  ctx[3].default;
   const default_slot = create_slot(default_slot_template, ctx,
   /*$$scope*/
-  ctx[4], null);
+  ctx[2], null);
   return {
     c() {
       if (default_slot) default_slot.c();
@@ -1258,10 +1258,10 @@ function create_fragment(ctx) {
       if (default_slot) {
         if (default_slot.p && dirty &
         /*$$scope*/
-        16) {
+        4) {
           update_slot(default_slot, default_slot_template, ctx,
           /*$$scope*/
-          ctx[4], dirty, null, null);
+          ctx[2], dirty, null, null);
         }
       }
     },
@@ -1290,19 +1290,11 @@ function instance($$self, $$props, $$invalidate) {
     $$scope
   } = $$props;
   let {
-    url
-  } = $$props;
-  let {
-    wsUrl
-  } = $$props;
-  let {
-    headers = {}
-  } = $$props;
-  let {
     hasura
   } = $$props;
-  setHeaders(headers);
-  const client = getClient(url, wsUrl);
+  let {
+    client
+  } = $$props;
   setContext("api", {
     query: client.query,
     mutate: client.mutate,
@@ -1312,24 +1304,20 @@ function instance($$self, $$props, $$invalidate) {
   });
 
   $$self.$$set = $$props => {
-    if ("url" in $$props) $$invalidate(0, url = $$props.url);
-    if ("wsUrl" in $$props) $$invalidate(1, wsUrl = $$props.wsUrl);
-    if ("headers" in $$props) $$invalidate(2, headers = $$props.headers);
-    if ("hasura" in $$props) $$invalidate(3, hasura = $$props.hasura);
-    if ("$$scope" in $$props) $$invalidate(4, $$scope = $$props.$$scope);
+    if ("hasura" in $$props) $$invalidate(0, hasura = $$props.hasura);
+    if ("client" in $$props) $$invalidate(1, client = $$props.client);
+    if ("$$scope" in $$props) $$invalidate(2, $$scope = $$props.$$scope);
   };
 
-  return [url, wsUrl, headers, hasura, $$scope, slots];
+  return [hasura, client, $$scope, slots];
 }
 
 class SvGraphQL extends SvelteComponent {
   constructor(options) {
     super();
     init(this, options, instance, create_fragment, safe_not_equal, {
-      url: 0,
-      wsUrl: 1,
-      headers: 2,
-      hasura: 3
+      hasura: 0,
+      client: 1
     });
   }
 
