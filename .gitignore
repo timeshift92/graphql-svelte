@@ -3,6 +3,7 @@ yarn.lock
 yarn-error.log
 package-lock.json
 # dist/
+coverage
 .DS_Store
 .env
 .nyc_output/

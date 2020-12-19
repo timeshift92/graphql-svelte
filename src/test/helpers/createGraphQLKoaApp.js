@@ -8,9 +8,6 @@ import { errorHandler, execute } from 'graphql-api-koa'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 
-import { createServer } from "http";
-import { SubscriptionServer } from "subscriptions-transport-ws";
-import { subscriptionManager, schema } from "./subscriptions";
 /**
  * Creates a GraphQL Koa app.
  * @param {object} fields GraphQL `query` fields.
@@ -44,31 +41,75 @@ export const createGraphQLKoaApp = (
       })
     )
 
+import { ApolloServer, gql, PubSub } from 'apollo-server'
+// const { ApolloServer, gql,PubSub } = require('apollo-server');
+const pubsub = new PubSub()
+const typeDefs = gql`
+  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
-export const createSubscriptionServer = createServer((request, response) => {
-  response.writeHead(404);
-  response.end();
-});
+  # This "Book" type defines the queryable fields for every book in our data source.
+  type Book {
+    title: String
+    author: String
+  }
 
-const subscriptionServer = new SubscriptionServer({
-  onConnect: async (connectionParams, webSocket) => {
-    console.log('WebSocket connection established');
-    // the following object fields will be added to subscriptions context and filter methods
-    return {
-      authToken: connectionParams.authToken
+  # The "Query" type is special: it lists all of the available queries that
+  # clients can execute, along with the return type for each. In this
+  # case, the "books" query returns an array of zero or more Books (defined above).
+  type Query {
+    books: [Book]
+    echo: String
+    requestCount: Int
+  }
+
+  type Subscription {
+    bookAdded: Book
+  }
+
+  type Mutation {
+    addBook(title: String, author: String): Book
+  }
+`
+
+let books = [
+  {
+    title: 'The Awakening',
+    author: 'Kate Chopin'
+  },
+  {
+    title: 'City of Glass',
+    author: 'Paul Auster'
+  }
+]
+
+const BOOK_ADDED = 'BOOK_ADDED'
+
+const resolvers = {
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator([BOOK_ADDED])
     }
   },
-  onUnsubscribe: (a, b) => {
-    console.log('Unsubscribing');
+  Query: {
+    books(root, args, context) {
+      return books
+    },
+    echo(root, args, context) {
+      return 'hello'
+    }
   },
-  onDisconnect: (a, b) => {
-    console.log('Disconnecting');
-  },
-  subscriptionManager: subscriptionManager
-}, {
-  server: createSubscriptionServer,
-  path: '/'
-});
+  Mutation: {
+    addBook(root, args, context) {
+      pubsub.publish(BOOK_ADDED, { bookAdded: args })
+      books.push(args)
+      return args
+    }
+  }
+}
 
+export function subsctiptionServer(request) {
+  // resolvers.Query = Object.assign(resolvers.Query, request)
+  return new ApolloServer({ typeDefs, resolvers })
+}
 
-
+// server.listen(4000)

@@ -1,4 +1,3 @@
-import 'unfetch'
 import mitt from 'mitt'
 import { graphqlFetchOptions } from './graphqlFetchOptions.js'
 import { hashObject } from './hashObject.js'
@@ -17,9 +16,21 @@ import { hashObject } from './hashObject.js'
  * ```
  */
 export class GraphQL {
-  constructor({ cache = {} } = {}) {
+  constructor({ cache = {}, cacheWrapper = null } = {}) {
     const { on, off, emit } = mitt()
 
+    /**
+     * wrapper for cache
+     * @kind function
+     * @name GraphQL#cacheWrapper
+     * @example <caption>Example wrapping cache</caption>
+     * ```
+     *  import { writable } from 'svelte/store'
+     *
+     *  this.cacheWrapper(cacheValue)
+     * ```
+     */
+    this.cacheWrapper = cacheWrapper
     /**
      * Adds an event listener.
      * @kind function
@@ -136,9 +147,9 @@ export class GraphQL {
       typeof fetch === 'function'
         ? fetch
         : () =>
-          Promise.reject(
-            new Error('Global fetch API or polyfill unavailable.')
-          )
+            Promise.reject(
+              new Error('Global fetch API or polyfill unavailable.')
+            )
     const cacheValue = {}
     const cacheValuePromise = fetcher(url, options)
       .then(
@@ -170,16 +181,18 @@ export class GraphQL {
       )
       .then(() => {
         // Cache the operation.
-        if (!cacheValue.graphQLErrors && !cacheValue.parseError)
-          this.cache[cacheKey] = cacheValue
+        // if (!cacheValue.graphQLErrors && !cacheValue.parseError)
+        this.cache[cacheKey] = this.cacheWrapper
+          ? this.cacheWrapper(cacheValue)
+          : cacheValue
 
         // If there are no more operations loading for this cache key, delete
         // the empty array from the `operations` property.
-        if (!this.operations[cacheKey].length)
-          delete this.operations[cacheKey];
+        !this.operations[cacheKey].length && delete this.operations[cacheKey]
 
         this.emit('cache', {
-          cacheKey, cacheValue,
+          cacheKey,
+          cacheValue,
           // May be undefined if there was a fetch error.
           response: fetchResponse
         })
@@ -209,12 +222,20 @@ export class GraphQL {
    * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
    * @returns {GraphQLOperationLoading} Loading GraphQL operation details.
    */
-  operate = ({ operation, fetchOptionsOverride, reloadOnLoad, resetOnLoad }) => {
+  operate = ({
+    operation,
+    fetchOptionsOverride,
+    reloadOnLoad,
+    resetOnLoad
+  }) => {
     if (reloadOnLoad && resetOnLoad)
-      throw new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.')
+      throw new Error(
+        'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
+      )
 
     const fetchOptions = graphqlFetchOptions(operation)
-    if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
+    fetchOptionsOverride && fetchOptionsOverride(fetchOptions)
+
     const cacheKey = hashObject(fetchOptions)
     const cacheValuePromise =
       // Use an identical existing request or…

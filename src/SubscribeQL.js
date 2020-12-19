@@ -1,3 +1,6 @@
+if (typeof WebSocket == 'undefined') {
+  const WebSocket = {}
+}
 
 import Backoff from 'backo'
 import mitt from 'mitt'
@@ -13,6 +16,19 @@ function isObject(value) {
 }
 
 export class SubscriptionClient {
+  /**
+   *
+   * @param {*} url
+   * @param {{
+   *   connectionCallback:string
+   *   connectionParams:Object,
+   *   timeout:number,
+   *   reconnect:boolean,
+   *   reconnectionAttempts:number,
+   *   lazy:boolean,
+   *   inactivityTimeout:number
+   *   }} options
+   */
   constructor(url, options) {
     const {
       connectionCallback = undefined,
@@ -273,7 +289,7 @@ export class SubscriptionClient {
     ) {
       throw new Error(
         'Incorrect option types. query must be a string,' +
-        '`operationName` must be a string, and `variables` must be an object.'
+          '`operationName` must be a string, and `variables` must be an object.'
       )
     }
   }
@@ -282,8 +298,8 @@ export class SubscriptionClient {
     const payloadToReturn =
       payload && payload.query
         ? Object.assign({}, payload, {
-          query: payload.query
-        })
+            query: payload.query
+          })
         : payload
     return {
       id,
@@ -339,8 +355,8 @@ export class SubscriptionClient {
             'error',
             new Error(
               'A message was not sent because socket is not connected, is closing or ' +
-              'is already closed. Message was: ' +
-              JSON.stringify(message)
+                'is already closed. Message was: ' +
+                JSON.stringify(message)
             )
           )
         }
@@ -421,6 +437,7 @@ export class SubscriptionClient {
 
           // Send connection_init message, no need to wait for connection to success (reduce roundtrips)
           this.sendMessage(undefined, 'connection_init', connectionParams)
+
           this.flushUnsentMessagesQueue()
         } catch (error) {
           this.sendMessage(undefined, 'connection_error', error)
@@ -490,12 +507,20 @@ export class SubscriptionClient {
         break
 
       case 'error':
-        this.operations[opId].handler(this.formatErrors(parsedMessage.payload),null)
+        this.operations[opId].handler(
+          this.formatErrors(parsedMessage.payload),
+          null
+        )
         delete this.operations[opId]
         break
 
       case 'data':
-        const parsedPayload = !parsedMessage.payload.errors ? parsedMessage.payload : {...parsedMessage.payload, errors: this.formatErrors(parsedMessage.payload.errors) }
+        const parsedPayload = !parsedMessage.payload.errors
+          ? parsedMessage.payload
+          : {
+              ...parsedMessage.payload,
+              errors: this.formatErrors(parsedMessage.payload.errors)
+            }
         this.operations[opId].handler(null, parsedPayload)
         break
 
@@ -531,9 +556,19 @@ export class SubscriptionClient {
   }
 }
 
-
-
-
+/**
+ *
+ * @param {*} url
+ * @param {{
+ *   connectionCallback:string
+ *   connectionParams:Object,
+ *   timeout:number,
+ *   reconnect:boolean,
+ *   reconnectionAttempts:number,
+ *   lazy:boolean,
+ *   inactivityTimeout:number
+ *   }} options
+ */
 export function SubscribeQL(url, options) {
-  return new SubscriptionClient(url, options);
+  return new SubscriptionClient(url, options)
 }

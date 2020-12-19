@@ -17,63 +17,63 @@
  * ```
  */
 export function reportCacheErrors({
-    cacheKey,
-    cacheValue: { fetchError, httpError, parseError, graphQLErrors }
-  }) {
-    if (fetchError || httpError || parseError || graphQLErrors) {
+  cacheKey,
+  cacheValue: { fetchError, httpError, parseError, graphQLErrors }
+}) {
+  if (fetchError || httpError || parseError || graphQLErrors) {
+    // eslint-disable-next-line no-console
+    console.groupCollapsed(`GraphQL cache errors for key “${cacheKey}”:`)
+
+    if (fetchError) {
       // eslint-disable-next-line no-console
-      console.groupCollapsed(`GraphQL cache errors for key “${cacheKey}”:`)
-  
-      if (fetchError) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('Fetch:')
-  
-        // eslint-disable-next-line no-console
-        console.log(fetchError)
-  
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-      }
-  
-      if (httpError) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('HTTP:')
-  
-        // eslint-disable-next-line no-console
-        console.log(`Status: ${httpError.status}`)
-  
-        // eslint-disable-next-line no-console
-        console.log(`Text: ${httpError.statusText}`)
-  
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-      }
-  
-      if (parseError) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('Parse:')
-  
-        // eslint-disable-next-line no-console
-        console.log(parseError)
-  
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-      }
-  
-      if (graphQLErrors) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('GraphQL:')
-  
-        graphQLErrors.forEach(({ message }) =>
-          // eslint-disable-next-line no-console
-          console.log(message)
-        )
-  
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-      }
-  
+      console.groupCollapsed('Fetch:')
+
+      // eslint-disable-next-line no-console
+      console.log(fetchError)
+
       // eslint-disable-next-line no-console
       console.groupEnd()
     }
+
+    if (httpError) {
+      // eslint-disable-next-line no-console
+      console.groupCollapsed('HTTP:')
+
+      // eslint-disable-next-line no-console
+      console.log(`Status: ${httpError.status}`)
+
+      // eslint-disable-next-line no-console
+      console.log(`Text: ${httpError.statusText}`)
+
+      // eslint-disable-next-line no-console
+      console.groupEnd()
+    }
+
+    if (parseError) {
+      // eslint-disable-next-line no-console
+      console.groupCollapsed('Parse:')
+
+      // eslint-disable-next-line no-console
+      console.log(parseError)
+
+      // eslint-disable-next-line no-console
+      console.groupEnd()
+    }
+
+    if (graphQLErrors) {
+      // eslint-disable-next-line no-console
+      console.groupCollapsed('GraphQL:')
+
+      graphQLErrors.forEach(({ message }) =>
+        // eslint-disable-next-line no-console
+        console.log(message)
+      )
+
+      // eslint-disable-next-line no-console
+      console.groupEnd()
+    }
+
+    // eslint-disable-next-line no-console
+    console.groupEnd()
   }
+}

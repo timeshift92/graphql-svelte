@@ -4,6 +4,8 @@ import { terser } from 'rollup-plugin-terser'
 import cleanup from 'rollup-plugin-cleanup';
 import babel from 'rollup-plugin-babel';
 import gzipPlugin from 'rollup-plugin-gzip';
+import svelte from "rollup-plugin-svelte";
+
 export default {
   input: 'src/index.js',
   output: [{
@@ -24,6 +26,7 @@ export default {
       browser: true,
     }),
     cleanup(),
+    svelte(),
     babel({
       babelrc: false,
       extensions: ['.js','.mjs', '.jsx', '.es6', '.es', '.mjs', '.html', '.svelte'],
@@ -66,8 +69,8 @@ export default {
     }),
     commonjs(),
 
-    terser(),
-    gzipPlugin(),
+    // terser(),
+    // gzipPlugin(),
   ],
 
 }

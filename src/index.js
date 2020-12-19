@@ -2,8 +2,13 @@ export { GraphQL } from './GraphQL'
 export { reportCacheErrors } from './reportCacheErrors'
 export { graphqlFetchOptions } from './graphqlFetchOptions'
 export { hashObject } from './hashObject'
-export { SubscribeQL } from './SubscribeQL';
-export { GraphQLSvelte } from './GraphQLSvelte';
+export { SubscribeQL } from './SubscribeQL'
+import * as svqlConfig from "./svqlConfig";
+import SvGraphQL from "./SvGraphQL.svelte";
+export {
+  SvGraphQL,
+  svqlConfig
+}
 /**
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.
  * @kind typedef
@@ -48,7 +53,6 @@ export { GraphQLSvelte } from './GraphQLSvelte';
  * @prop {string} [credentials] Authentication credentials mode.
  * @see [`GraphQLFetchOptionsOverride` functions]{@link GraphQLFetchOptionsOverride} accept this type.
  */
-
 
 /**
  * A GraphQL operation. Additional properties may be used; all are sent to the

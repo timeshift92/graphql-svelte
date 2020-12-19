@@ -9,117 +9,68 @@ $ npm i -d graphql-svelte <br>
 $ yarn add --dev graphql-svelte
 ```
 
-# how to use for vanilla js
+# main config
 
 ```
-import { GraphQL } from "graphql-svelte";
-import { graphqlFetchOptions, hashObject, SubscribeQL } from "graphql-svelte";
-const graphql = new GraphQL();
+import { svqlConfig } from "graphql-svelte";
 
-const fetchOptionsOverride = options => {
-(options.url = "http://localhost:4000/graphql"),
-(options.headers = {"content-type": "application/json"});
-};
+const client = svqlConfig.getClient(url, wsUrl)
+svqlConfig.setHeaders({ 'content-type': 'application/json' })
 
-//if you need subscribtion
+// Graphql Error
 
-const sub = new SubscribeQL('wss://locahost:4000/v1/graphql', {
-  reconnect: true,
-  lazy: true,
-  connectionParams: async () => {
-    return {
-      headers: {
-        "x-hasura-admin-secret": "secret"
-      }
-    };
-  }
+client.on('cache', ({ cacheKey, cacheValue: { fetchError, httpError, parseError, graphQLErrors } }) => {
+    console.log(fetchError)
 })
 
-let subscribe = (query) => {
-  return sub.request(query);
+// WS Error
+
+client.subscriptionEvents.on('error', (error) => {
+    console.log(error)
+})
+
+export {
+    query: client.query,
+    mutate: client.mutate,
+    subsciption: client.subscription
 }
-
-//if you nedd query and mutate
-
-let get = async (query, variables) => {
-  const fetchOptions = graphqlFetchOptions({
-    query,
-    variables
-  });
-  fetchOptionsOverride(fetchOptions)
-  const has = hashObject(fetchOptions);
-  if (graphql.cache[has])
-    return new Promise((resolve, reject) => {
-      resolve(graphql.cache[has]);
-    });
-  const pending = graphql.operate({
-    fetchOptionsOverride,
-    operation: {
-      query,
-      variables
-    }
-  });
-  return pending.cacheValuePromise
-}
-
-
-export { get, subscribe };
-
+​```
 ```
-
 # how to use for svelte
 
---- graphql.js
+
+
+## Layout.svelte
+
 
 ```
+<script>
 
+import { SvGraphQL,svqlConfig } from "graphql-svelte";
 
-import { GraphQLProvider, reportCacheErrors } from "graphql-svelte";
+// if you have fluent based graphql quert generator for hasura
+import Hasura from 'hasura-orm'
+export function hasura(schema) {
+	Hasura['provider'] = client
+	const orm = new Hasura(schema)
+	orm['provider'] = client
+	return orm
+}
 
-const client = GraphQLProvider({
-    url: 'http://localhost:8082/v1/graphql',
-    headers: () => ({
-        "content-type": "application/json",
-        Accept: 'application/json',
-        "x-hasura-admin-secret": "secret"
-    }),
-    ws: {
-        url: 'ws://localhost:8082/v1/graphql'
-    }
+const client = svqlConfig.getClient(url,wsUrl)
+svqlConfig.setHeaders({ 'content-type': 'application/json' })
+// Graphql Error
+client.on('cache',({ cacheKey, cacheValue: { fetchError, httpError, parseError, graphQLErrors } }) => {
+  console.log(fetchError)
 })
-client.graphql.on('cache', reportCacheErrors)
+// WS Error
+client.subscriptionEvents.on('error',(error) => {
+  console.log(error)
+})
+</script>
+
+<SvGraphQL config={client} {hasura}>
+  <slot></slot>
+</SvGraphQL>
 
 
-
-export default client
-```
-
---- api.js
-
-```
-
-import { queries } from "../queries"
-import client from './graphql'
-
-export async function get(query, variables = null) {
-  return await client.get({ query: queries[query], variables })
-}
-
-export function query(query, variables = null) {
-  return client.query({ query: queries[query], variables })
-}
-
-export async function mutate(mutation, variables = null) {
-  return await client.mutate( { query: queries[mutation], variables })
-}
-
-export function subscription(query,  variables = null ) {
-  return client.subscribe( { query: queries[query], variables })
-}
-
-export function restore(query, data) {
-
- return client.restore(query, data)
-}
-
-```
