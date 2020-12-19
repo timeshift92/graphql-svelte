@@ -466,12 +466,12 @@ class SubscriptionClient {
         'error',
         new Error(
           'Incorrect option types. query must be a string,' +
-          '`operationName` must be a string, and `variables` must be an object.'
+            '`operationName` must be a string, and `variables` must be an object.'
         )
       );
       throw new Error(
         'Incorrect option types. query must be a string,' +
-        '`operationName` must be a string, and `variables` must be an object.'
+          '`operationName` must be a string, and `variables` must be an object.'
       )
     }
   }
@@ -479,8 +479,8 @@ class SubscriptionClient {
     const payloadToReturn =
       payload && payload.query
         ? Object.assign({}, payload, {
-          query: payload.query,
-        })
+            query: payload.query,
+          })
         : payload;
     return {
       id,
@@ -489,8 +489,7 @@ class SubscriptionClient {
     }
   }
   formatErrors(errors) {
-    if (errors[0])
-      this.eventEmitter.emit('error', errors[0]);
+    if (errors[0]) this.eventEmitter.emit('error', errors[0]);
     if (Array.isArray(errors)) {
       return errors
     }
@@ -534,8 +533,8 @@ class SubscriptionClient {
             'error',
             new Error(
               'A message was not sent because socket is not connected, is closing or ' +
-              'is already closed. Message was: ' +
-              JSON.stringify(message)
+                'is already closed. Message was: ' +
+                JSON.stringify(message)
             )
           );
         }
@@ -664,9 +663,9 @@ class SubscriptionClient {
         const parsedPayload = !parsedMessage.payload.errors
           ? parsedMessage.payload
           : {
-            ...parsedMessage.payload,
-            errors: this.formatErrors(parsedMessage.payload.errors),
-          };
+              ...parsedMessage.payload,
+              errors: this.formatErrors(parsedMessage.payload.errors),
+            };
         this.operations[opId].handler(null, parsedPayload);
         break
       case 'ka':
@@ -713,7 +712,7 @@ function headers() {
 function getClient(url, wsUrl, wsOptions = {}) {
   const graphql = new GraphQL();
   const fetchOptionsOverride = (_options) => {
-(_options.url = url), (_options.headers = headers());
+ (_options.url = url), (_options.headers = headers());
   };
   function getOrSet(
     fetchOptionsOverride,
@@ -749,10 +748,10 @@ function getClient(url, wsUrl, wsOptions = {}) {
         ...(ws.connectionParams
           ? { connectionParams: ws.connectionParams }
           : {
-              connectionParams: () => {
-                return headers()
-              },
-            }),
+            connectionParams: () => {
+              return headers()
+            },
+          }),
       });
     let sub = initSub(wsOptions);
     client.subscription = (query, variables) =>

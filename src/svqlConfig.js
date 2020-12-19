@@ -17,7 +17,8 @@ export function headers() {
 }
 
 /**
- *
+ * * Gets default client {@link svqlConfig} for a
+ * [GraphQL Client]{@link svqlConfig}.
  * @param {*} url
  * @param {*} wsUrl
  * @param {{
@@ -34,7 +35,7 @@ export function getClient(url, wsUrl, wsOptions = {}) {
   const graphql = new GraphQL()
 
   const fetchOptionsOverride = (_options) => {
-    ;(_options.url = url), (_options.headers = headers())
+    ; (_options.url = url), (_options.headers = headers())
   }
 
   function getOrSet(
@@ -66,6 +67,9 @@ export function getClient(url, wsUrl, wsOptions = {}) {
 
     return pending.cacheValuePromise.then((r) => graphql.cache[has])
   }
+    /**
+   * @param {event:string,callback:Function } client.on
+   */
   let client = {}
   client = Object.assign(client, graphql)
 
@@ -77,10 +81,10 @@ export function getClient(url, wsUrl, wsOptions = {}) {
         ...(ws.connectionParams
           ? { connectionParams: ws.connectionParams }
           : {
-              connectionParams: () => {
-                return headers()
-              },
-            }),
+            connectionParams: () => {
+              return headers()
+            },
+          }),
       })
     let sub = initSub(wsOptions)
 
@@ -111,11 +115,8 @@ export function getClient(url, wsUrl, wsOptions = {}) {
    */
   client.query = (query, variables, cache = true) =>
     getOrSet(fetchOptionsOverride, { query, variables }, cache)
-  /**
-   *
-   * @param {string} query
-   * @param {Object} variables
-   * @param {boolean} cache
-   */
+
   return client
 }
+
+
