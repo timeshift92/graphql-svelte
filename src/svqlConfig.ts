@@ -1,8 +1,7 @@
-import { GraphQLFetchOptions, WSOptions } from '..'
+import { GraphQLFetchOptions, queryType, graphqlOptions } from '..'
 import { GraphQL } from './GraphQL'
 import { graphqlFetchOptions } from './graphqlFetchOptions'
 import { hashObject } from './hashObject'
-import { queryType } from './interfaces'
 import { SubscribeQL } from './SubscribeQL'
 //@ts-ignore
 export let client: {
@@ -46,8 +45,8 @@ export function headers() {
  *   inactivityTimeout:number
  *   }} options
  */
-export function getClient(url: string, wsUrl?: string, wsOptions: WSOptions = {}) {
-  const graphql = new GraphQL()
+export function getClient({ url, wsUrl, wsOptions = {}, graphqlOptions = {} }: graphqlOptions) {
+  const graphql = new GraphQL(graphqlOptions)
 
   const fetchOptionsOverride = (_options: GraphQLFetchOptions) => {
     ; (_options.url = url), (_options.headers = headers())

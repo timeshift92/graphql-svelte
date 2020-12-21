@@ -1,6 +1,2 @@
-export interface queryType {
-  query: string;
-  variables?: object;
-  cache?: boolean;
-  key?: (key: any) => any;
-};
+import { GraphQLCacheKey, GraphQLCacheValue, WSOptions } from "..";
+

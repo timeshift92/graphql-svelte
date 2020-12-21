@@ -1,6 +1,6 @@
 {
   "name": "graphql-svelte",
-  "version": "1.2.8",
+  "version": "1.2.10",
   "description": "graphql fetcher alternate apollo client",
   "main": "dist",
   "scripts": {
@@ -56,7 +56,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/test/"
+      "/test/",
+      "/src/reportCacheErrors.ts"
     ],
     "coverageThreshold": {
       "global": {

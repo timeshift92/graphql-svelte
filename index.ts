@@ -145,3 +145,20 @@ export interface WSOptions {
    */
   inactivityTimeout?: number;
 }
+
+export interface queryType {
+  query: string;
+  variables?: object;
+  cache?: boolean;
+  key?: (key: any) => any;
+};
+
+export interface graphqlOptions {
+  url: string;
+  wsUrl?: string;
+  wsOptions?: WSOptions;
+  graphqlOptions?: {
+    cache?: Record<GraphQLCacheKey, GraphQLCacheValue>
+    cacheWrapper?: Function
+  }
+}
