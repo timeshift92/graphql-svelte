@@ -14,3 +14,7 @@ npm-debug.log
 examples
 node_modules
 package-lock.json
+coverage
+src
+test
+yarn.lock
