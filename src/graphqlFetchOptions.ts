@@ -11,6 +11,7 @@ export function graphqlFetchOptions(operation: any) {
   const fetchOptions: GraphQLFetchOptions = {
     url: '/graphql',
     method: 'POST',
+    credentials:"include",
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   }
   fetchOptions.body = JSON.stringify(operation)
