@@ -12,6 +12,7 @@ describe('graphqlFetchOptions', () => {
         {
           url: '/graphql',
           method: 'POST',
+          credentials:'include',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
