@@ -93,7 +93,7 @@ export function getClient({ url, wsUrl, wsOptions = {}, graphqlOptions = {} }: g
           ? { connectionParams: ws.connectionParams }
           : {
             connectionParams: () => {
-              return headers()
+              return { headers: headers() }
             },
           }),
       })
