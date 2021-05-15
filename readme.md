@@ -46,7 +46,7 @@ export {
 
 import { SvGraphQL,svqlConfig } from "graphql-svelte";
 
-// if you have fluent based graphql quert generator for hasura
+// if you have fluent based graphql query generator for hasura
 import Hasura from 'hasura-orm'
 export function hasura(schema) {
 	Hasura['provider'] = client
