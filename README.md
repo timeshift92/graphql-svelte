@@ -2,29 +2,27 @@
 
 Alternate apollo-graphql for Svelte and other native js
 
-# setup
+# Setup
 
 ```
-$ npm i -d graphql-svelte <br>
+$ npm i -d graphql-svelte
 $ yarn add --dev graphql-svelte
 ```
 
-# main config
+# Main config
 
-````
+```
 import { svqlConfig } from "graphql-svelte";
 
 const client = svqlConfig.getClient(url, wsUrl)
 svqlConfig.setHeaders({ 'content-type': 'application/json' })
 
 // Graphql Error
-
 client.on('cache', ({ cacheKey, cacheValue: { fetchError, httpError, parseError, graphQLErrors } }) => {
     console.log(fetchError)
 })
 
 // WS Error
-
 client.sub.onError(error => {
     console.log(error)
 })
@@ -34,10 +32,10 @@ export {
     mutate: client.mutate,
     subsciption: client.subscription
 }
-​```
-````
+```
 
-# how to use for svelte
+
+# How to use for svelte
 
 ## Layout.svelte
 
@@ -57,10 +55,12 @@ export function hasura(schema) {
 
 const client = svqlConfig.getClient(url,wsUrl)
 svqlConfig.setHeaders({ 'content-type': 'application/json' })
+
 // Graphql Error
 client.on('cache',({ cacheKey, cacheValue: { fetchError, httpError, parseError, graphQLErrors } }) => {
   console.log(fetchError)
 })
+
 // WS Error
 client.sub.onError(error => {
     console.log(error)
