@@ -5,7 +5,10 @@ Alternate apollo-graphql for Svelte and other native js
 # Setup
 
 ```
+$ pnpm i -d graphql-svelte
+# OR
 $ npm i -d graphql-svelte
+# OR
 $ yarn add --dev graphql-svelte
 ```
 
