@@ -45,7 +45,7 @@ export {
 ```
 <script>
 
-import { SvGraphQL,svqlConfig } from "graphql-svelte";
+import { SvGraphQL, svqlConfig } from "graphql-svelte";
 
 // if you have fluent based graphql query generator for hasura
 import Hasura from 'hasura-orm'
@@ -56,11 +56,11 @@ export function hasura(schema) {
 	return orm
 }
 
-const client = svqlConfig.getClient(url,wsUrl)
+const client = svqlConfig.getClient(url, wsUrl)
 svqlConfig.setHeaders({ 'content-type': 'application/json' })
 
 // Graphql Error
-client.on('cache',({ cacheKey, cacheValue: { fetchError, httpError, parseError, graphQLErrors } }) => {
+client.on('cache', ({ cacheKey, cacheValue: { fetchError, httpError, parseError, graphQLErrors } }) => {
   console.log(fetchError)
 })
 
