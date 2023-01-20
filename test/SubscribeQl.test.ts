@@ -68,6 +68,53 @@ describe('SubscribeQl', () => {
 
     _done()
   }, 1500)
+  it('closes the connection with force option', (_done) => {
+    const subs3 = SubscribeQL(`ws://localhost:${port}/graphql`, {
+      reconnect: true,
+      timeout: 100,
+      inactivityTimeout: 100,
+      connectionParams: () => { throw Error('asda') }
+    })
+    subs3.request({ query: subquery }).subscribe((r: any) => {
+      subs3.close(false)
+      expect(subs3.status).toEqual(subs3.wsImpl.CLOSED);
+    })
+    subs3.tryReconnect()
+    subs3.checkConnection()
+    expect(subs3.processReceivedData).toThrowError()
+    subs3.checkMaxConnectTimeout()
+    subs3.onReconnected(() => {
+      subs3.close(false)
+      _done()
+    })
+    subs3.close(false)
+
+    _done()
+  });
+
+
+  it('connection params undefined TryReconnectForce', (_done) => {
+    const subs3 = SubscribeQL(`ws://localhost:${port}/graphql`, {
+      reconnect: true,
+      timeout: 100,
+      inactivityTimeout: 100,
+      connectionParams: () => { throw Error('asda') }
+    })
+    subs3.request({ query: subquery }).subscribe((r: any) => {
+      subs3.close(true)
+    })
+    subs3.tryReconnect()
+    subs3.checkConnection()
+    expect(subs3.processReceivedData).toThrowError()
+    subs3.checkMaxConnectTimeout()
+    subs3.onReconnected(() => {
+      subs3.close(true)
+      _done()
+    })
+    subs3.close()
+
+    _done()
+  }, 1500)
 
 
   it('connection complete', (_done) => {
@@ -263,6 +310,8 @@ describe('SubscribeQl', () => {
     })
 
   })
+
+
 
 
 })

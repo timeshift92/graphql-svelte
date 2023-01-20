@@ -69,7 +69,7 @@ export class SubscriptionClient {
     this.lazy = !!lazy;
     this.inactivityTimeout = inactivityTimeout;
     this.closedByUser = false;
-    this.backoff = new Backoff({ jitter: 0.5 });
+    this.backoff = new Backoff({ jitter: 0.5, });
     this.client = null;
     this.maxConnectTimeGenerator = this.createMaxConnectTimeGenerator();
     this.connectionParams = this.getConnectionParams(connectionParams);
@@ -155,31 +155,31 @@ export class SubscriptionClient {
     };
   }
 
-  on(eventName: string, callback: any, context?:any) {
+  on(eventName: string, callback: any, context?: any) {
     on(eventName, callback)
   }
 
-  onConnected(callback: any, context?:any) {
+  onConnected(callback: any, context?: any) {
     return this.on('connected', callback, context)
   }
 
-  onConnecting(callback: any, context?:any) {
+  onConnecting(callback: any, context?: any) {
     return this.on('connecting', callback, context)
   }
 
-  onDisconnected(callback: any, context?:any) {
+  onDisconnected(callback: any, context?: any) {
     return this.on('disconnected', callback, context)
   }
 
-  onReconnected(callback: any, context?:any) {
+  onReconnected(callback: any, context?: any) {
     return this.on('reconnected', callback, context)
   }
 
-  onReconnecting(callback: any, context?:any) {
+  onReconnecting(callback: any, context?: any) {
     return this.on('reconnecting', callback, context)
   }
 
-  onError(callback: any, context?:any) {
+  onError(callback: any, context?: any) {
     return this.on('error', callback, context)
   }
 

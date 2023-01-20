@@ -58,7 +58,7 @@ describe('SubscribeQlConnections', () => {
       subs.close()
       _done()
     })
-    // expect(subs.sendMessageRaw.bind({id:1,type:"data",payload:'123'})).toThrow()
+    expect(subs.sendMessageRaw.bind({id:1,type:"data",payload:'123'})).toThrow()
 
     subs.onConnected(() => {
       const graphql = new GraphQL()
